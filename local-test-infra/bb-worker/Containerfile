@@ -1,0 +1,85 @@
+FROM fedora:37
+
+RUN dnf install -y --setopt=tsflags=nodocs --setopt=install_weak_deps=False \
+    ccache \
+    clang \
+    cmake \
+    curl \
+    diffutils \
+    findutils \
+    gcc \
+    gdb \
+    git \
+    glibc-all-langpacks \
+    golang \
+    inotify-tools \
+    jq \
+    krb5-libs \
+    libatomic \
+    libedit-devel \
+    libicu \
+    libstdc++-static \
+    libxml2-devel \
+    lld \
+    lttng-ust \
+    make \
+    nano \
+    ncurses-devel \
+    ninja-build \
+    openssl-libs \
+    patch \
+    python3 \
+    python3-devel \
+    python3-pip \
+    python3-psutil \
+    python3-service-identity \
+    python3-virtualenv \
+    redhat-lsb-core \
+    rsync \
+    swig \
+    tar \
+    xz-devel \
+    zip \
+    zlib \
+   && dnf clean all
+
+# Install Buildbot from pip
+# See http://trac.buildbot.net/wiki/RunningBuildbotWithVirtualEnv
+RUN useradd --create-home bb-worker
+WORKDIR /home/bb-worker
+USER bb-worker
+COPY requirements.txt requirements.txt
+RUN virtualenv sandbox \
+    && source sandbox/bin/activate \
+    && python -m pip install --upgrade pip \
+    && source sandbox/bin/activate \
+    && pip install --requirement requirements.txt
+USER root
+
+LABEL maintainer="Konrad Kleine <kkleine@redhat.com>"
+
+ENTRYPOINT [ "/home/bb-worker/bin/start.sh" ]
+
+COPY home/ /home/bb-worker/
+
+# Port choices
+# 9994 = staging
+# 9990 = production
+ENV BUILDBOT_MASTER="lab.llvm.org:9994"
+
+# All commands are run in a build-specific subdirectory of this base dir
+ENV BUILDBOT_BASEDIR="/home/bb-worker/buildbot"
+
+# Options passed to buildbot-worker create-worker
+ENV BUILDBOT_CREATE_WORKER_OPTS=""
+
+# Will be visible from the build status page. So you may wish to munge it a bit
+# if address-harvesting spambots are a concern.
+ENV BUILDBOT_INFO_ADMIN="Your Name <yourname at email dot com>"
+
+ENV BUILDBOT_ACCESS_URI=""
+################################################################################
+
+ENV PATH="/home/bb-worker/bin:${PATH}" HOME=/home/bb-worker
+
+

@@ -1,0 +1,14 @@
+FROM docker.io/library/nginx:1.23.4
+
+RUN mkdir -pv /certs
+
+# TODO(kwk): This should be mounted into the container as a volume.
+RUN openssl req \
+        -newkey rsa:4096 \
+        -nodes \
+        -sha256 \
+        -x509 \
+        -days 365 \
+        -batch \
+        -keyout /certs/bb-master.key \
+        -out /certs/bb-master.crt

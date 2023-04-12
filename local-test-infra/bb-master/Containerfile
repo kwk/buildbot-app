@@ -1,0 +1,63 @@
+FROM fedora:37
+RUN dnf install -y --setopt=tsflags=nodocs --setopt=install_weak_deps=False \
+    curl \
+    findutils \
+    git \
+    glibc-all-langpacks \
+    inotify-tools \
+    jq \
+    make \
+    python3 \
+    python3-devel \
+    python3-pip \
+    python3-psutil \
+    python3-service-identity \
+    python3-virtualenv \
+    redhat-lsb-core \
+    rsync \
+    swig \
+    tar \
+    xz-devel \
+    zip \
+    zlib \
+   && dnf clean all
+
+# Install Buildbot from pip
+# See http://trac.buildbot.net/wiki/RunningBuildbotWithVirtualEnv
+RUN useradd --create-home bb-master
+WORKDIR /home/bb-master
+USER bb-master
+COPY requirements.txt requirements.txt
+RUN virtualenv sandbox \
+    && source sandbox/bin/activate \
+    && python -m pip install --upgrade pip \
+    && source sandbox/bin/activate \
+    && pip install --requirement requirements.txt
+USER root
+
+# Volume to mount config file into the container 
+# WARNING: Don't forget to mount the whole base dir instead of just the file. 
+VOLUME /home/bb-master/cfg
+
+LABEL maintainer="Konrad Kleine <kkleine@redhat.com>"
+
+ENTRYPOINT [ "/home/bb-master/bin/start.sh" ]
+
+RUN mkdir -pv \
+    /home/bb-master/bin \
+    /home/bb-master/cfg \
+    /home/bb-master/basedir
+
+ENV BUILDBOT_MASTER_PORT=9989
+ENV BUILDBOT_WWW_PORT=8010
+ENV BUILDBOT_MASTER_TRY_PORT=8031
+ENV BUILDBOT_MASTER_TITLE="Default"
+
+COPY home/ /home/bb-master/
+
+RUN chmod +x /home/bb-master/bin/*
+RUN chgrp -R 0 /home/bb-master \
+    && chmod -R g=u /home/bb-master /etc/passwd
+
+USER bb-master
+

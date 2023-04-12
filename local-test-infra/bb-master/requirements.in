@@ -1,0 +1,9 @@
+# Convert this file into a requirements.txt file by running:
+#
+# pip install pip-tools
+# pip-compile --resolver=backtracking requirements.in
+
+# Find out more about requirements.txt here: https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
+
+buildbot[bundle]==3.7.0
+txrequests
