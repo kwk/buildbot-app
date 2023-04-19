@@ -75,13 +75,26 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		}
 
 		commentOnIssue(fmt.Sprintf("Thank you for using `/buildbot` [here](%s)", *event.Comment.HTMLURL))
-		gh.Issues.EditComment(context.Background(), ownerLogin, repoName, *event.Comment.ID, &github.IssueComment{
-			Reactions: comment.GetReactions(),
-		})
+		// gh.Issues.EditComment(context.Background(), ownerLogin, repoName, *event.Comment.ID, &github.IssueComment{
+		// 	Reactions: comment.GetReactions(),
+		// })
+
+		// _, _, err = gh.Issues.EditComment(context.Background(),
+		// 	ownerLogin,
+		// 	repoName,
+		// 	int64(prNumber),
+		// 	&github.IssueComment{
+		// 		Reactions: &github.Reactions{Eyes: github.Int(1)},
+		// 	})
+		// if err != nil {
+		// 	err = fmt.Errorf("error creating reaction: %w", err)
+		// 	log.Println(err)
+		// 	return err
+		// }
 
 		// TODO(kwk): Add a reaction to the triggering /buildbot comment
 		// 403 resource not accessible by integration
-		// _, _, err = gh.Reactions.CreateCommentReaction(context.Background(), ownerLogin, repoName, *event.Comment.ID, ":robot:")
+		// _, _, err = gh.Reactions.CreateCommentReaction(context.Background(), ownerLogin, repoName, *event.Comment.ID, "eyes")
 		// if err != nil {
 		// 	err = fmt.Errorf("error creating reaction: %w", err)
 		// 	log.Println(err)
@@ -111,6 +124,19 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 			"We're starting this",
 			"Nothing yet",
 		)
+		optActions := []*github.CheckRunAction{
+			{
+				Label:       "Make check required",
+				Description: "Make check required to pass",
+				Identifier:  "MakeMandatory",
+			},
+			{
+				Label:       "Make check optional",
+				Description: "Make check required to pass",
+				Identifier:  "MakeOptional",
+			},
+		}
+		opts.Actions = optActions
 		checkRunTryBot, _, err := gh.Checks.CreateCheckRun(context.Background(), ownerLogin, repoName, opts)
 		if err != nil {
 			return fmt.Errorf("failed to create try bot check run: %w", err)
@@ -126,8 +152,9 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		}
 		log.Printf("trybot command executed: %s", combinedOutput)
 		_, _, err = gh.Checks.UpdateCheckRun(context.Background(), ownerLogin, repoName, *checkRunTryBot.ID, github.UpdateCheckRunOptions{
-			Name:   *checkRunTryBot.Name,
-			Status: github.String(string(CheckRunStateInProgress)),
+			Name:    *checkRunTryBot.Name,
+			Status:  github.String(string(CheckRunStateInProgress)),
+			Actions: optActions,
 		})
 		if err != nil {
 			return fmt.Errorf("failed to update try bot check run: %w", err)

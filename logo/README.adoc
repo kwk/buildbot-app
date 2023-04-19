@@ -1,0 +1,18 @@
+## Origin of the Logo
+
+The logo was taken from here:
+
+Website: https://publicdomainvectors.org/en/free-clipart/Robot-and-gear/90270.html
+
+## Modifications
+
+[source,console]
+----
+$ curl -o robot-and-gear.zip https://publicdomainvectors.org/download.php?file=robot-and-gear.zip
+$ unzip robot-and-gear.zip
+$ eps2pdf robot-and-gear.eps
+$ pdf2svg robot-and-gear.eps logo.svg
+$ inkscape logo.svg
+----
+
+In Inkscape I've cut off the bottom half of the picture to make it square.

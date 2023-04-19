@@ -29,13 +29,13 @@ func defaultCreateCheckRunOptions(pr *github.PullRequest, name string, status Ch
 			Title:   github.String(title),
 			Summary: github.String(summary),
 			Text:    github.String(text),
-			// Images: []*github.CheckRunImage{
-			// 	{
-			// 		Alt:      github.String("Buildbot nut"),
-			// 		ImageURL: github.String("http://buildbot.net/img/nut.svg"),
-			// 		Caption:  github.String("Buildbot Caption"),
-			// 	},
-			// },
+			Images: []*github.CheckRunImage{
+				{
+					Alt:      github.String("Buildbot App Logo"),
+					ImageURL: github.String("https://raw.githubusercontent.com/kwk/buildbot-app/main/logo/logo-round-smaller.png"),
+					// Caption:  github.String("Buildbot App Logo"),
+				},
+			},
 		},
 	}
 }

@@ -12,6 +12,8 @@ Konrad Kleine;
 // :icons: font
 :source-highlighter: pygments
 
+image::logo/logo-round-small.png[]
+
 toc::[]
 
 ## Overview
