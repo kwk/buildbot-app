@@ -74,6 +74,7 @@ $ reflex -r '\.go$' -s -- sh -c "go build github.com/kwk/buildbot-app/cmd/buildb
 
 ## Buildbot links
 
+* System Architecture: https://docs.buildbot.net/latest/manual/introduction.html#system-architecture
 * Custom services (Might be worth looking into): https://docs.buildbot.net/latest/manual/configuration/services/index.html
 
 

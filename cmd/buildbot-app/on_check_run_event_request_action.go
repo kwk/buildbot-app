@@ -9,7 +9,7 @@ import (
 
 func (srv *AppServer) OnCheckRunEventRequestAction() githubevents.CheckRunEventHandleFunc {
 	return func(deliveryID string, eventName string, event *github.CheckRunEvent) error {
-		log.Printf("OnCheckRunEventRequestAction with this requested action identifier: %s\n", event.RequestedAction.Identifier)
+		log.Printf("NOT IMPLEMENTED: OnCheckRunEventRequestAction with this requested action identifier: %s\n", event.RequestedAction.Identifier)
 		return nil
 	}
 }
