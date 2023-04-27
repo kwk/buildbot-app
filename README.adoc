@@ -27,7 +27,7 @@ architecture overview]
 [[_comment_buildbot_on_pr]]
 === Comment `/buildbot` on PR
 
-image:docs/media/on-buildbot-comment.png[on buildbot comment]
+image:docs/media/on-buildbot-comment.svg[on buildbot comment]
 
 [[_developer_setup]]
 == Developer Setup

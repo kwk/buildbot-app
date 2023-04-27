@@ -1,5 +1,5 @@
 <map id="on-buildbot-comment_map" name="on-buildbot-comment_map">
-<area shape="rect" id="id1" href="https://docs.github.com/en/rest/checks/runs#create-a-check-run" title="https://docs.github.com/en/rest/checks/runs#create-a-check-run" alt="" coords="619,625,721,642"/>
-<area shape="rect" id="id2" href="https://docs.github.com/en/rest/issues/comments#create-an-issue-comment" title="https://docs.github.com/en/rest/issues/comments#create-an-issue-comment" alt="" coords="619,478,737,496"/>
-<area shape="rect" id="id3" href="https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment" title="https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment" alt="" coords="604,255,796,272"/>
+<area shape="rect" id="id1" href="https://docs.github.com/en/rest/checks/runs#create-a-check-run" title="https://docs.github.com/en/rest/checks/runs#create-a-check-run" alt="" coords="616,685,715,702"/>
+<area shape="rect" id="id2" href="https://docs.github.com/en/rest/issues/comments#create-an-issue-comment" title="https://docs.github.com/en/rest/issues/comments#create-an-issue-comment" alt="" coords="616,541,734,558"/>
+<area shape="rect" id="id3" href="https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment" title="https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment" alt="" coords="600,322,782,340"/>
 </map>

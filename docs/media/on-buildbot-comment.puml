@@ -7,7 +7,7 @@
 ' $ java -jar plantuml.jar -verbose on-buildbot-comment.puml
 
 ' Give calls and returns a number for easier referencing
-autonumber
+autonumber "<B>00."
 
 title
     Sequence diagram for executing builds on Buildbot
@@ -24,13 +24,17 @@ skinparam SequenceBoxBorderColor #aeaeae
 skinparam roundcorner 20
 skinparam SequenceGroupBackgroundColor #718fbf
 skinparam SequenceGroupHeaderFontColor #ffffff
-skinparam SequenceGroupBodyBackgroundColor #9dc1fc
+skinparam SequenceGroupBodyBackgroundColor #9dc1fc90
+' Style participants
+skinparam ParticipantBackgroundColor #efefef
+skinparam ParticipantBorderColor #efefef
+skinparam defaultFontName Red Hat Display Regular
 
 actor "Alice" as alice
 
 box "Github.com"
-    participant "Github.com\n<b>Website</b>" as gh
-    participant "Github.com\n<b>API</b>" as ghapi
+    participant "<img github-logo/github-mark.png{scale=0.3}>\nGithub.com\nWebsite" as gh
+    participant "<img github-logo/github-mark.png{scale=0.3}>\nGithub.com\nAPI" as ghapi
 end box
 
 box "Public\nHTTP endpoint\n(e.g. ngrok)"
@@ -38,15 +42,15 @@ box "Public\nHTTP endpoint\n(e.g. ngrok)"
 end box
 
 box "Localhost developer machine"
-    participant "Buildbot\n<b>App</b>" as app
-    participant "Buildbot\n<b>Master</b>" as master
-    participant "Buildbot\n<b>Worker1</b>" as worker1
-    participant "Buildbot\n<b>Worker2</b>" as worker2
-    participant "Buildbot\n<b>Worker3</b>" as worker3
+    participant "<img logo/logo-round-smaller.png{scale=1}>\nBuildbot\nApp" as app
+    participant "<img buildbot-logo/buildbot.png{scale=0.3}>\nBuildbot\nMaster" as master
+    participant "<img windows-logo/windows.png{scale=0.1}>\nBuildbot\nWorker1" as worker1
+    participant "<img tux-logo/tux.svg{scale=0.4}>\nBuildbot\nWorker2" as worker2
+    participant "<img apple-logo/apple.png{scale=0.1}>\nBuildbot\nWorker3" as worker3
 end box
 
 ' app -> forwarder : Register to receive events\n(only needed during\ndevelopment stage)
-alice -> gh : Create PR comment:\n<b>/buildbot</b>
+alice -> gh : Create PR comment:\n""/buildbot""
 note left : <u>NOTE:</u> The semantics are not defined so\nI just picked a simple string\nto kick off the pipeline.
 ghapi -> forwarder : [[https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment Send issue_comment Webhook]]
 forwarder -> app : forward this\ninbound\nrequest\n(and the\nones below)
@@ -67,7 +71,7 @@ activate app
             gh -> alice : Show check run on PR page\nunder the Buildbot App\n<i>check suite</i>
         end
 
-        app -> master : <b>buildbot try</b>\nCLI command
+        app -> master : ""buildbot try""\nCLI command
         note left : <u>NOTE:</u> We send properties to buildbot (e.g. CheckRunID, PullRequestID, etc.) that it sends back to the app\nlater with the HTTPStatusPush service. From these properties we can deduce which check we have to update.
         activate master
             note right : <u>NOTE:</u> try-scheduler picks up buildrequest\n(executes delegation builder)\nand <i>triggers a builder</i> to execute build\non a worker. 

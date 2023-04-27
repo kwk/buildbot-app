@@ -1,10 +1,10 @@
-## Origin of the Logo
+== Origin of the Logo
 
 The logo was taken from here:
 
 Website: https://publicdomainvectors.org/en/free-clipart/Robot-and-gear/90270.html
 
-## Modifications
+== Modifications
 
 [source,console]
 ----

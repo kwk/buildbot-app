@@ -14,7 +14,7 @@ image::docs/media/developer-architecture-overview.png[]
 
 === Comment `/buildbot` on PR
 
-image::docs/media/on-buildbot-comment.png[]
+image::docs/media/on-buildbot-comment.svg[]
 
 == Developer Setup
 
