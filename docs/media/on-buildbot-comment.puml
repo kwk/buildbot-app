@@ -67,7 +67,8 @@ activate app
             gh -> alice : Show check run on PR page\nunder the Buildbot App\n<i>check suite</i>
         end
 
-        app -> master : <b>buildbot try</b>\ncommand
+        app -> master : <b>buildbot try</b>\nCLI command
+        note left : <u>NOTE:</u> We send properties to buildbot (e.g. CheckRunID, PullRequestID, etc.) that it sends back to the app\nlater with the HTTPStatusPush service. From these properties we can deduce which check we have to update.
         activate master
             note right : <u>NOTE:</u> try-scheduler picks up buildrequest\n(executes delegation builder)\nand <i>triggers a builder</i> to execute build\non a worker. 
         app --> forwarder : HTTP 20X
