@@ -11,3 +11,5 @@ Konrad Kleine;
 :sectanchors:
 // :icons: font
 :source-highlighter: pygments
+
+// toc::[]

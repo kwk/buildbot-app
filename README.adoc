@@ -10,7 +10,9 @@ Konrad Kleine;
 :listing-caption: Listing
 :sectanchors:
 // :icons: font
-:source-highlighter: pygmentsLet’s build an app that lets you control your buildbot through
+:source-highlighter: pygments
+
+// toc::[]Let’s build an app that lets you control your buildbot through
 `/buildbot` comments on Github Pull Requests.
 
 image:docs/media/logo/logo-round-small.png[logo round small]
@@ -27,7 +29,8 @@ architecture overview]
 [[_comment_buildbot_on_pr]]
 === Comment `/buildbot` on PR
 
-image:docs/media/on-buildbot-comment.svg[on buildbot comment]
+image::docs/media/on-buildbot-comment.svg[Sequence diagram for
+on-buildbot-comment scenario]
 
 [[_developer_setup]]
 == Developer Setup
