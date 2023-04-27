@@ -49,6 +49,7 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 			err = fmt.Errorf("failed to parse buildStatus.Properties.GithubAppInstallationID[0] as int64: %w", err)
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		gh, err := srv.NewGithubClient(appInstallId)
 		if err != nil {
@@ -63,6 +64,7 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 			err = fmt.Errorf("failed to parse buildStatus.Properties.GithubCheckRunID[0] as int64: %w", err)
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		checkRun, _, err := gh.Checks.GetCheckRun(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], checkRunID)
@@ -75,9 +77,10 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 
 		conclusion := CheckRunStateFromBuildbotResult(buildStatus.Results)
 
+		now := time.Now()
 		newStateString := fmt.Sprintf("[Builder: %s]: %s ([log](%s))", buildStatus.Builder.Name, buildStatus.StateString, buildStatus.URL)
 		if checkRun.Output != nil && checkRun.Output.Summary != nil {
-			newStateString = strings.Join([]string{*checkRun.Output.Summary, WrapMsgWithTimePrefix(newStateString, time.Now())}, "\n")
+			newStateString = strings.Join([]string{*checkRun.Output.Summary, WrapMsgWithTimePrefix(newStateString, now)}, "\n")
 		}
 
 		_, _, err = gh.Checks.UpdateCheckRun(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], checkRunID, github.UpdateCheckRunOptions{
@@ -116,6 +119,34 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 		}
 		log.Printf("updated github check run: %s\n", *checkRun.Name)
 		log.Printf("check run details: %s\n", buildStatus.URL)
+
+		// Update the build log comment
+		//-------------------------------------
+		buildLogCommentID, err := strconv.ParseInt(buildStatus.Properties.GithubBuildLogCommentID[0], 10, 64)
+		if err != nil {
+			err = fmt.Errorf("failed to parse buildStatus.Properties.GithubBuildLogCommentID[0] as int64: %w", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		buildLogComment, _, err := gh.Issues.GetComment(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], buildLogCommentID)
+		if err != nil {
+			err := fmt.Errorf("failed to get build log comment: %w", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		buildLogCommentBody := buildLogComment.Body
+		newBuildLogComment := buildLogComment
+		newBuildLogComment.Body = github.String(fmt.Sprintf(`%s<br/><strong>%s</strong> <i>[Builder: %s]</i> %s (<a href="%s">log</a>)`, *buildLogCommentBody, now.Format(time.RFC1123Z), buildStatus.Builder.Name, buildStatus.StateString, buildStatus.URL))
+		_, _, err = gh.Issues.EditComment(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], buildLogCommentID, newBuildLogComment)
+		if err != nil {
+			err := fmt.Errorf("failed to edit build log comment: %w", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		io.WriteString(w, "thank you for calling back to the buildbot-app")
 	}
 }

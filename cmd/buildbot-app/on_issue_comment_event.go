@@ -78,7 +78,13 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 			return fmt.Errorf("pr is not mergable: %w", err)
 		}
 
-		commentOnIssue(fmt.Sprintf("Thank you for using `/buildbot` [here](%s).", *event.Comment.HTMLURL))
+		buildLogCommentID := int64(0)
+		newComment := commentOnIssue(fmt.Sprintf(`Thank you @%s for using the <a href="todo:link-to-documentation-here"><code>/buildbot</code></a> command <a href="%s">here</a>!
+<sub>This very comment will be used to continously log build state changes for your request. We decided to do this in addition to using Github's Check Runs below so you can inspect previous check runs better.</sub>
+`, *event.Comment.User.Login, *event.Comment.HTMLURL))
+		if newComment != nil {
+			buildLogCommentID = newComment.GetID()
+		}
 
 		// IDEA: We could set up one try-builder for all jobs and have that
 		// try-builder trigger other jobs depending on the given properties. The
@@ -137,6 +143,7 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		props := NewGithubPullRequest(pr).ToTryBotPropertyArray()
 		props = append(props, fmt.Sprintf("--property=github_check_run_id=%d", *checkRunTryBot.ID))
 		props = append(props, fmt.Sprintf("--property=github_app_installation_id=%d", appInstallationID))
+		props = append(props, fmt.Sprintf("--property=github_build_log_comment_id=%d", buildLogCommentID))
 		combinedOutput, err := srv.RunTryBot(commentUser, ownerLogin, repoName, props...)
 		if err != nil {
 			return fmt.Errorf("failed to run trybot: %s: %w", combinedOutput, err)

@@ -53,15 +53,16 @@ end box
 alice -> gh : Create PR comment:\n""/buildbot""
 note left : <u>NOTE:</u> The semantics are not defined so\nI just picked a simple string\nto kick off the pipeline.
 ghapi -> forwarder : [[https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment Send issue_comment Webhook]]
-forwarder -> app : forward this\ninbound\nrequest\n(and the\nones below)
+forwarder -> app : forward this\ninbound\nrequest\n(and the\nones below,\nif any)
 activate app
         app -> app : Comment body\nmatches pattern?
         
         group Feedback to Github User: "We've received your message and begin processing shortly"
             app -> ghapi : [[https://docs.github.com/en/rest/issues/comments#create-an-issue-comment Create PR comment]]\nto indicate responsiveness
+            note left: <u>NOTE:</u> We call this comment the <b>build log comment</b>.\nWe'll be using it to store state updates to the build.
             activate ghapi
                 return HTTP 201 OK
-            gh -> alice : Display comment
+            gh -> alice : Display build log comment
         end
 
         group Feedback to Github User: "A check was created for you"
@@ -88,8 +89,16 @@ activate master
             app -> ghapi : Update check run and:\n* add build state to existing summary\n*adjust run state according to build result
             activate ghapi
                 return HTTP 20X
-            return HTTP 20X
+            
         gh -> alice : Show updated check suite\n"Starting..."
+
+        group Also update the build log comment
+            app -> ghapi : [[https://docs.github.com/en/rest/issues/comments#update-an-issue-comment Update build log comment]]
+            activate ghapi
+                return HTTP 20X OK
+            gh -> alice : Refresh build log comment
+        end
+        return HTTP 20X
     end
     
     master -> worker2 : execute build on\nchosen worker
@@ -104,8 +113,16 @@ activate master
             app -> ghapi : Update check run and:\n* add build state to existing summary\n*adjust run state according to build result
             activate ghapi
                 return HTTP 20X
+            gh -> alice : Show updated check suite\n"Failed..."
+
+            group Also update the build log comment
+                app -> ghapi : [[https://docs.github.com/en/rest/issues/comments#update-an-issue-comment Update build log comment]]
+                activate ghapi
+                    return HTTP 20X OK
+                gh -> alice : Refresh build log comment
+            end
             return HTTP 20X
-        gh -> alice : Show updated check suite\n"Failed..."
+        
     end
     
     deactivate master

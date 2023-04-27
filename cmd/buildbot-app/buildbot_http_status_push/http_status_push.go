@@ -20,6 +20,7 @@ type Properties struct {
 	GithubPullRequestHeadSha   []string `json:"github_pull_request_head_sha,omitempty"`
 	GithubCheckRunID           []string `json:"github_check_run_id,omitempty"`
 	GithubAppInstallationID    []string `json:"github_app_installation_id,omitempty"`
+	GithubBuildLogCommentID    []string `json:"github_build_log_comment_id,omitempty"`
 	Scheduler                  []string `json:"scheduler,omitempty"`
 	Buildername                []string `json:"buildername,omitempty"`
 	Os                         []string `json:"os,omitempty"`
