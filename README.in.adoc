@@ -15,7 +15,7 @@ image::docs/media/developer-architecture-overview.png[]
 === Comment `/buildbot` on PR
 
 .A walkthrough video as a user for on-buildbot-comment scenario
-video::9NpbKEmkvt8[youtube]
+video::9NpbKEmkvt8[youtube,width=1000,height=562,theme=light]
 
 .Sequence diagram for on-buildbot-comment scenario
 image::docs/media/on-buildbot-comment.svg[]
