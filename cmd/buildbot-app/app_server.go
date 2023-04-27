@@ -82,7 +82,7 @@ func (srv *AppServer) RunTryBot(responsibleGithubLogin string, githubRepoOwner s
 	args := append([]string{
 		"try",
 		fmt.Sprintf("--master=%s", srv.buildbotMaster),
-		fmt.Sprintf("--builder=%s", "trybuilder1"),
+		fmt.Sprintf("--builder=%s", "delegationBuilder"),
 		fmt.Sprintf("--username=%s", srv.buildbotTryUser),
 		fmt.Sprintf("--passwd=%s", srv.buildbotTryPassword),
 		fmt.Sprintf("--diff=%s", dummyDiffFile.Name()),

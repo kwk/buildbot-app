@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/google/go-github/v50/github"
 	"github.com/kwk/buildbot-app/cmd/buildbot-app/buildbot_http_status_push"
@@ -72,14 +74,20 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 		}
 
 		conclusion := CheckRunStateFromBuildbotResult(buildStatus.Results)
+
+		newStateString := fmt.Sprintf("[Builder: %s]: %s ([log](%s))", buildStatus.Builder.Name, buildStatus.StateString, buildStatus.URL)
+		if checkRun.Output != nil && checkRun.Output.Summary != nil {
+			newStateString = strings.Join([]string{*checkRun.Output.Summary, WrapMsgWithTimePrefix(newStateString, time.Now())}, "\n")
+		}
+
 		_, _, err = gh.Checks.UpdateCheckRun(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], checkRunID, github.UpdateCheckRunOptions{
 			Name:       *checkRun.Name,
 			Status:     github.String(string(CheckRunStateCompleted)),
-			Conclusion: github.String(string(conclusion)), // TODO(kwk): Take actual build status
+			Conclusion: github.String(string(conclusion)),
 			DetailsURL: github.String(buildStatus.URL),
 			Output: &github.CheckRunOutput{
-				Title:   github.String("Buildbot status"),
-				Summary: github.String(buildStatus.StateString),
+				Title:   github.String("Buildbot Status Log"),
+				Summary: github.String(newStateString),
 				Text:    github.String(fmt.Sprintf("[Buildbot Build Page](%s)", buildStatus.URL)),
 			},
 			Actions: []*github.CheckRunAction{

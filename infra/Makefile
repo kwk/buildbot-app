@@ -7,9 +7,10 @@ COMPOSE_ARGS := -p "infra" \
 				--podman-run-args=--quiet \
 				--podman-rm-args=-f
 
-include ./help.mk
+include ../help.mk
 
 .PHONY: build
+## Builds all container images we need for local testing
 build:
 	podman-compose $(COMPOSE_ARGS) build
 
@@ -34,5 +35,6 @@ follow-logs:
 	podman-compose logs -f
 
 .PHONY: stop
+## Stops and removes any running container images from this job
 stop:
 	-podman-compose $(COMPOSE_ARGS) down -t0

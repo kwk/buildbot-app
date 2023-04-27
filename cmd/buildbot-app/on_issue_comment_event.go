@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"time"
 
 	"github.com/cbrgm/githubevents/githubevents"
 	"github.com/google/go-github/v50/github"
@@ -28,7 +29,8 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		if comment == nil {
 			return nil
 		}
-		if !regexp.MustCompile("^/buildbot$").MatchString(comment.GetBody()) {
+		commentBody := comment.GetBody()
+		if !regexp.MustCompile("^/buildbot$").MatchString(commentBody) {
 			return nil
 		}
 		log.Printf("/buildbot was used")
@@ -56,8 +58,8 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 			log.Printf("failed to get pull request: %+v", err)
 		}
 
-		commentOnIssue := func(commentBody string) {
-			_, _, err = gh.Issues.CreateComment(context.Background(),
+		commentOnIssue := func(commentBody string) *github.IssueComment {
+			issueComment, _, err := gh.Issues.CreateComment(context.Background(),
 				ownerLogin,
 				repoName,
 				prNumber,
@@ -66,7 +68,9 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 				})
 			if err != nil {
 				log.Printf("failed to create comment: %+v", err)
+				return nil
 			}
+			return issueComment
 		}
 
 		if !pr.GetMergeable() {
@@ -74,7 +78,7 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 			return fmt.Errorf("pr is not mergable: %w", err)
 		}
 
-		commentOnIssue(fmt.Sprintf("Thank you for using `/buildbot` [here](%s)", *event.Comment.HTMLURL))
+		commentOnIssue(fmt.Sprintf("Thank you for using `/buildbot` [here](%s).", *event.Comment.HTMLURL))
 
 		// IDEA: We could set up one try-builder for all jobs and have that
 		// try-builder trigger other jobs depending on the given properties. The
@@ -91,14 +95,17 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		//       anything about a build we know how to reflect this in the
 		//       check run on github.
 		//---------------------------------------------------------------------
-		opts := defaultCreateCheckRunOptions(
-			pr,
-			fmt.Sprintf("%s's buildbot check", commentUser),
-			CheckRunStateQueued,
-			"Buildbot job",
-			"We're *starting* this",
-			"About to send job to your *buildbot* instance.",
-		)
+		opts := github.CreateCheckRunOptions{
+			Name:    fmt.Sprintf("@%s's buildbot check: %s", commentUser, commentBody),
+			HeadSHA: *pr.Head.SHA,
+			Status:  github.String(string(CheckRunStateQueued)),
+			Output: &github.CheckRunOutput{
+				Title:   github.String("Buildbot Status Log"),
+				Summary: github.String(WrapMsgWithTimePrefix("We're about to forward your request to buildbot.", time.Now())),
+				Text:    github.String("Please wait for the URL to your buildbot job to appear here."),
+				Images:  nil,
+			},
+		}
 		optActions := []*github.CheckRunAction{
 			{
 				Label:       "Make check required",
@@ -122,6 +129,10 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 			return fmt.Errorf("failed to create try bot check run: %w", err)
 		}
 
+		// To simulate latency
+		// log.Printf("Sleep for 10 seconds before sending request to buildbot")
+		// time.Sleep(10 * time.Second)
+
 		// Make a buildbot try call with an empty diff (!!!)
 		props := NewGithubPullRequest(pr).ToTryBotPropertyArray()
 		props = append(props, fmt.Sprintf("--property=github_check_run_id=%d", *checkRunTryBot.ID))
@@ -131,56 +142,6 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 			return fmt.Errorf("failed to run trybot: %s: %w", combinedOutput, err)
 		}
 		log.Printf("trybot command executed: %s", combinedOutput)
-		_, _, err = gh.Checks.UpdateCheckRun(context.Background(), ownerLogin, repoName, *checkRunTryBot.ID, github.UpdateCheckRunOptions{
-			Name:    *checkRunTryBot.Name,
-			Status:  github.String(string(CheckRunStateInProgress)),
-			Actions: optActions,
-		})
-		if err != nil {
-			return fmt.Errorf("failed to update try bot check run: %w", err)
-		}
-
-		//---------------------------------------------------------------------
-		// Let's create a check run that always succeeds
-		//---------------------------------------------------------------------
-		opts = defaultCreateCheckRunOptions(pr,
-			"Always succeed run",
-			CheckRunStateQueued,
-			"Placeholder check",
-			"This check always succeeds",
-			"You can put all kinds of `markdown` *in* [here](example.com).",
-		)
-		opts.DetailsURL = nil // Does this turn off the URL?
-		checkRunAlwaysSucceed, _, err := gh.Checks.CreateCheckRun(context.Background(), ownerLogin, repoName, opts)
-		if err != nil {
-			return fmt.Errorf("failed to create always succeeding check run: %w", err)
-		}
-		_, _, err = gh.Checks.UpdateCheckRun(context.Background(), ownerLogin, repoName, *checkRunAlwaysSucceed.ID, github.UpdateCheckRunOptions{
-			Name:       *checkRunAlwaysSucceed.Name,
-			Status:     github.String(string(CheckRunStateCompleted)),
-			Conclusion: github.String(string(CheckRunConclusionSuccess)),
-			Actions:    optActions,
-		})
-		if err != nil {
-			return fmt.Errorf("failed to update always succeeding  check run: %w", err)
-		}
-
-		//---------------------------------------------------------------------
-		// Let's create a check run that has some action on it (not wired back
-		// atm.)
-		//---------------------------------------------------------------------
-		opts = defaultCreateCheckRunOptions(pr, "Action check run name", CheckRunStateQueued, "Action check run summary", "This check always succeeds", "")
-		opts.Actions = []*github.CheckRunAction{
-			{
-				Label:       "My Button Label",
-				Description: "Curious what will happen?",
-				Identifier:  "OurRefForThisAction",
-			},
-		}
-		_, _, err = gh.Checks.CreateCheckRun(context.Background(), ownerLogin, repoName, opts)
-		if err != nil {
-			return fmt.Errorf("failed to create check run with an action on it: %w", err)
-		}
 
 		return nil
 	}

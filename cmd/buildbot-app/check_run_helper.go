@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/google/go-github/v50/github"
+	"fmt"
+	"time"
 )
 
 type CheckRunState string
@@ -41,23 +42,13 @@ func CheckRunStateFromBuildbotResult(resultCode int) CheckRunConclusion {
 	return CheckRunConclusionFailure
 }
 
-func defaultCreateCheckRunOptions(pr *github.PullRequest, name string, status CheckRunState, title string, summary string, text string) github.CreateCheckRunOptions {
-	return github.CreateCheckRunOptions{
-		Name:    name,
-		HeadSHA: *pr.Head.SHA,
-		Status:  github.String(string(status)),
-		Output: &github.CheckRunOutput{
-			Title:   github.String(title),
-			Summary: github.String(summary),
-			Text:    github.String(text),
-			Images:  nil,
-			// Images: []*github.CheckRunImage{
-			// 	{
-			// 		Alt:      github.String("Buildbot App Logo"),
-			// 		ImageURL: github.String("https://raw.githubusercontent.com/kwk/buildbot-app/main/logo/logo-round-small.png"),
-			// 		// Caption:  github.String("Buildbot App Logo"),
-			// 	},
-			// },
-		},
-	}
+// GetTimePrefix returns a string like "[Mon, 02 Jan 2006 15:04:05 -0700]: "
+// which can be used to format log messages from buildbot in the github check
+// run's page. If "t" is nil, the current time is used.
+func GetTimePrefix(t time.Time) string {
+	return fmt.Sprintf("[%s]: ", t.Format(time.RFC1123Z))
+}
+
+func WrapMsgWithTimePrefix(message string, t time.Time) string {
+	return fmt.Sprintf("%s%s", GetTimePrefix(t), message)
 }
