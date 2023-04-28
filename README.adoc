@@ -12,19 +12,19 @@ Konrad Kleine;
 // :icons: font
 :source-highlighter: pygments
 
-// // See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#admonitions
-// ifdef::env-github[]
-// :tip-caption: :bulb:
-// :note-caption: :information_source:
-// :important-caption: :heavy_exclamation_mark:
-// :caution-caption: :fire:
-// :warning-caption: :warning:
-// endif::[]
+// See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#admonitions
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
-// // See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#images
-// ifdef::env-github[]
-// :imagesdir: https://raw.githubusercontent.com/kwk/buildbot-app/main/
-// endif::[]
+// See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#images
+ifdef::env-github[]
+:imagesdir: https://raw.githubusercontent.com/kwk/buildbot-app/main/
+endif::[]
 
 // toc::[]
 Let’s build an app that lets you control your buildbot through
