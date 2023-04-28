@@ -5,11 +5,38 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/cbrgm/githubevents/githubevents"
 	"github.com/google/go-github/v50/github"
 )
+
+// GetArgumentsFromComment returns a map with case insensitive options that can
+// override each other. The options are parsed left-to-right so the last option
+// given wins.
+// For example:
+//
+//	/buildbot mandatory=yes builder=blabla mandatory=no
+//
+// Will return {mandatory=no, builder=blabla}
+func GetArgumentsFromComment(commentBody string) (map[string]interface{}, error) {
+	arguments := map[string]interface{}{}
+	argString := strings.TrimSpace(strings.TrimPrefix(commentBody, "/buildbot"))
+	kvList := strings.Split(argString, " ")
+	for i, kvStr := range kvList {
+		// log.Printf("i: %d, kvStr: %s", i, strings.TrimSpace(kvStr))
+		kv := strings.SplitN(kvStr, "=", 2)
+		// log.Printf("len: %d", len(kv))
+		if len(kv) != 2 {
+			return nil, fmt.Errorf("invalid comment: %s", commentBody)
+		}
+		key := strings.ToLower(kv[0])
+		value := kv[1]
+		arguments[key] = value
+	}
+	return arguments, nil
+}
 
 func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHandleFunc {
 	return func(deliveryID string, eventName string, event *github.IssueCommentEvent) error {
@@ -29,11 +56,21 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		if comment == nil {
 			return nil
 		}
+
 		commentBody := comment.GetBody()
-		if !regexp.MustCompile("^/buildbot$").MatchString(commentBody) {
+
+		// Allow for: /buildbot mandatory=yes builder=blabla mandatory=no
+		if !regexp.MustCompile(`^/buildbot(\s+|mandatory=(yes|no)|builder=(\w+))*$`).MatchString(commentBody) {
 			return nil
 		}
 		log.Printf("/buildbot was used")
+
+		arguments, err := GetArgumentsFromComment(commentBody)
+		if err != nil {
+			err = fmt.Errorf("failed to parse arguments from comment: %w", err)
+			log.Println(err)
+			return err
+		}
 
 		// Create a github client based for this app's installation
 		appInstallationID := *event.GetInstallation().ID
@@ -144,6 +181,9 @@ func (srv *AppServer) OnIssueCommentEventAny() githubevents.IssueCommentEventHan
 		props = append(props, fmt.Sprintf("--property=github_check_run_id=%d", *checkRunTryBot.ID))
 		props = append(props, fmt.Sprintf("--property=github_app_installation_id=%d", appInstallationID))
 		props = append(props, fmt.Sprintf("--property=github_build_log_comment_id=%d", buildLogCommentID))
+		if mandatory, ok := arguments["mandatory"]; ok {
+			props = append(props, fmt.Sprintf("--property=github_check_run_mandatory=%v", mandatory))
+		}
 		combinedOutput, err := srv.RunTryBot(commentUser, ownerLogin, repoName, props...)
 		if err != nil {
 			return fmt.Errorf("failed to run trybot: %s: %w", combinedOutput, err)
