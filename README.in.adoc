@@ -18,7 +18,6 @@ This section lists the ideas and sometimes even fully implemented scenarios we h
 
 In this scenario a user authors a Pull Request comment with the comment body being `/buildbot`.
 
-.User authors /buildbot comment
 [.screenshot]
 image::docs/media/screenshots/author-buildbot-comment.png[]
 
@@ -31,7 +30,6 @@ The `buildbot-app` then creates a *Thank-you*-comment that serves two purposes:
 1. It shows the user that we understood the request and are thankful for it and that we are working on it.
 2. It is a perfect placeholder to store short build state changes for future lookups. That is why we call this comment the *build-log-comment*.
 +
-.A build-log-comment example
 [.screenshot]
 image::docs/media/screenshots/build-log-comment.png[]
 +
@@ -41,7 +39,6 @@ Just imagine, your PR gets updated and you want to see the previous build result
 
 Of course, we are also using GitHub's check runs as you can see here:
 
-.A check run overview
 [.screenshot]
 image::docs/media/screenshots/check-run-overview.png[]
 
@@ -52,7 +49,6 @@ I really like that we can dynamically create check runs on request and give them
 
 When you click on *Details* next to a check run, you're brought to this page on GitHub:
 
-.A details page of a check run
 [.screenshot]
 image::docs/media/screenshots/check-run-details.png[]
 
@@ -60,14 +56,12 @@ image::docs/media/screenshots/check-run-details.png[]
 
 We walk you through the creation of a Pull Request and authoring the `/buildbot` comment in this in this short video: https://www.youtube.com/watch?v=9NpbKEmkvt8
 
-.A walkthrough video as a user for on-buildbot-comment scenario
 video::9NpbKEmkvt8[youtube,width=1000,height=562,theme=light]
 
 ==== UML sequence diagram
 
 The sequence diagram for this scenario is layed out here. It includes some of the internals of the processing.
 
-.Sequence diagram for on-buildbot-comment scenario
 image::docs/media/on-buildbot-comment.svg[]
 
 ==== TODOs

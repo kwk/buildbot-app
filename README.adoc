@@ -44,8 +44,8 @@ scenarios we have for this GitHub app.
 In this scenario a user authors a Pull Request comment with the comment
 body being `/buildbot`.
 
-image::docs/media/screenshots/author-buildbot-comment.png[User authors
-/buildbot comment]
+image:docs/media/screenshots/author-buildbot-comment.png[author buildbot
+comment]
 
 The `buildbot-app` gets notified about a new comment and checks if it
 matches a regular expression. In this case the pattern is `^/buildbot$`
@@ -66,8 +66,7 @@ it and that we are working on it.
 future lookups. That is why we call this comment the
 *build-log-comment*.
 +
-image::docs/media/screenshots/build-log-comment.png[A build-log-comment
-example]
+image:docs/media/screenshots/build-log-comment.png[build log comment]
 +
 Just imagine, your PR gets updated and you want to see the previous
 build results. The _build-log-comment_ is there for you too look it up.
@@ -77,8 +76,7 @@ build results. The _build-log-comment_ is there for you too look it up.
 
 Of course, we are also using GitHub’s check runs as you can see here:
 
-image::docs/media/screenshots/check-run-overview.png[A check run
-overview]
+image:docs/media/screenshots/check-run-overview.png[check run overview]
 
 [NOTE]
 ====
@@ -89,8 +87,7 @@ give them good names.
 When you click on *Details* next to a check run, you’re brought to this
 page on GitHub:
 
-image::docs/media/screenshots/check-run-details.png[A details page of a
-check run]
+image:docs/media/screenshots/check-run-details.png[check run details]
 
 [[_video_walkthrough]]
 ==== Video walkthrough
@@ -105,8 +102,7 @@ https://www.youtube.com/watch?v=9NpbKEmkvt8
 The sequence diagram for this scenario is layed out here. It includes
 some of the internals of the processing.
 
-image::docs/media/on-buildbot-comment.svg[Sequence diagram for
-on-buildbot-comment scenario]
+image:docs/media/on-buildbot-comment.svg[on buildbot comment]
 
 [[_todos]]
 ==== TODOs
