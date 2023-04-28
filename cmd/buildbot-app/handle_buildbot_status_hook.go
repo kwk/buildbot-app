@@ -76,6 +76,9 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 		}
 
 		conclusion := CheckRunStateFromBuildbotResult(buildStatus.Results)
+		if !buildStatus.Properties.GithubCheckRunMandatory {
+			conclusion = CheckRunConclusionNeutral
+		}
 
 		now := time.Now()
 		newStateString := fmt.Sprintf("[Builder: %s]: %s ([log](%s))", buildStatus.Builder.Name, buildStatus.StateString, buildStatus.URL)

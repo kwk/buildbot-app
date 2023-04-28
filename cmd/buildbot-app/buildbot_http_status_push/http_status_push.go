@@ -21,6 +21,7 @@ type Properties struct {
 	GithubCheckRunID           []string `json:"github_check_run_id,omitempty"`
 	GithubAppInstallationID    []string `json:"github_app_installation_id,omitempty"`
 	GithubBuildLogCommentID    []string `json:"github_build_log_comment_id,omitempty"`
+	GithubCheckRunMandatory    bool     `json:"github_check_run_mandatory,omitempty"`
 	Scheduler                  []string `json:"scheduler,omitempty"`
 	Buildername                []string `json:"buildername,omitempty"`
 	Os                         []string `json:"os,omitempty"`
