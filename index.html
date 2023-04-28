@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.17">
 <meta name="author" content="Konrad Kleine">
-<title>Your Github App that talks to buildbot</title>
+<title>Your GitHub App that talks to buildbot</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -510,34 +510,41 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Your Github App that talks to buildbot</h1>
+<h1>Your GitHub App that talks to buildbot</h1>
 <div class="details">
 <span id="author" class="author">Konrad Kleine</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_overview">1. Overview</a></li>
-<li><a href="#_scenarios">2. Scenarios</a>
+<li><a href="#_scenarios">1. Scenarios</a>
 <ul class="sectlevel2">
-<li><a href="#_comment_buildbot_on_pr">2.1. Comment <code>/buildbot</code> on PR</a></li>
+<li><a href="#_comment_buildbot_on_pull_request">1.1. Comment <code>/buildbot</code> on Pull Request</a>
+<ul class="sectlevel3">
+<li><a href="#_build_log_comment">1.1.1. Build Log Comment</a></li>
+<li><a href="#_check_run">1.1.2. Check run</a></li>
+<li><a href="#_video_walkthrough">1.1.3. Video walkthrough</a></li>
+<li><a href="#_uml_sequence_diagram">1.1.4. UML sequence diagram</a></li>
+<li><a href="#_todos">1.1.5. TODOs</a></li>
 </ul>
 </li>
-<li><a href="#_developer_setup">3. Developer Setup</a></li>
-<li><a href="#_useful_links">4. Useful links</a>
-<ul class="sectlevel2">
-<li><a href="#_llvm_links">4.1. LLVM links</a></li>
-<li><a href="#_github_app_documents">4.2. Github App documents</a></li>
-<li><a href="#_interacting_with_github">4.3. Interacting with Github</a></li>
-<li><a href="#_golang_libraries">4.4. Golang libraries</a></li>
 </ul>
 </li>
-<li><a href="#_buildbot_links">5. Buildbot links</a>
+<li><a href="#_developer_setup">2. Developer Setup</a></li>
+<li><a href="#_useful_links">3. Useful links</a>
 <ul class="sectlevel2">
-<li><a href="#_misc_links">5.1. Misc links</a></li>
+<li><a href="#_llvm_links">3.1. LLVM links</a></li>
+<li><a href="#_github_app_documents">3.2. Github App documents</a></li>
+<li><a href="#_interacting_with_github">3.3. Interacting with Github</a></li>
+<li><a href="#_golang_libraries">3.4. Golang libraries</a></li>
 </ul>
 </li>
-<li><a href="#_todo">6. TODO</a></li>
+<li><a href="#_buildbot_links">4. Buildbot links</a>
+<ul class="sectlevel2">
+<li><a href="#_misc_links">4.1. Misc links</a></li>
+</ul>
+</li>
+<li><a href="#_todo">5. TODO</a></li>
 </ul>
 </div>
 </div>
@@ -555,25 +562,100 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_overview"><a class="anchor" href="#_overview"></a><a class="link" href="#_overview">1. Overview</a></h2>
+<h2 id="_scenarios"><a class="anchor" href="#_scenarios"></a><a class="link" href="#_scenarios">1. Scenarios</a></h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This section lists the ideas and sometimes even fully implemented scenarios we have for this GitHub app.</p>
+</div>
+<div class="sect2">
+<h3 id="_comment_buildbot_on_pull_request"><a class="anchor" href="#_comment_buildbot_on_pull_request"></a><a class="link" href="#_comment_buildbot_on_pull_request">1.1. Comment <code>/buildbot</code> on Pull Request</a></h3>
+<div class="paragraph">
+<p>In this scenario a user authors a Pull Request comment with the comment body being <code>/buildbot</code>.</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="docs/media/developer-architecture-overview.png" alt="developer architecture overview">
+<img src="docs/media/screenshots/author-buildbot-comment.png" alt="author buildbot comment">
 </div>
 </div>
+<div class="paragraph">
+<p>The <code>buildbot-app</code> gets notified about a new comment and checks if it matches a regular expression. In this case the pattern is <code>^/buildbot$</code> but it could be much more complex and equipped with arguments, depending on the semantics we want to establish. For the purpose of this demonstration, <code>/buildbot</code> is simply enough.</p>
+</div>
+<div class="sect3">
+<h4 id="_build_log_comment"><a class="anchor" href="#_build_log_comment"></a><a class="link" href="#_build_log_comment">1.1.1. Build Log Comment</a></h4>
+<div class="paragraph">
+<p>The <code>buildbot-app</code> then creates a <strong>Thank-you</strong>-comment that serves two purposes:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>It shows the user that we understood the request and are thankful for it and that we are working on it.</p>
+</li>
+<li>
+<p>It is a perfect placeholder to store short build state changes for future lookups. That is why we call this comment the <strong>build-log-comment</strong>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="docs/media/screenshots/build-log-comment.png" alt="build log comment">
 </div>
 </div>
-<div class="sect1">
-<h2 id="_scenarios"><a class="anchor" href="#_scenarios"></a><a class="link" href="#_scenarios">2. Scenarios</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_comment_buildbot_on_pr"><a class="anchor" href="#_comment_buildbot_on_pr"></a><a class="link" href="#_comment_buildbot_on_pr">2.1. Comment <code>/buildbot</code> on PR</a></h3>
+<div class="paragraph">
+<p>Just imagine, your PR gets updated and you want to see the previous build results. The <em>build-log-comment</em> is there for you too look it up.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_check_run"><a class="anchor" href="#_check_run"></a><a class="link" href="#_check_run">1.1.2. Check run</a></h4>
+<div class="paragraph">
+<p>Of course, we are also using GitHub&#8217;s check runs as you can see here:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="docs/media/screenshots/check-run-overview.png" alt="check run overview">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>I really like that we can dynamically create check runs on request and give them good names.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When you click on <strong>Details</strong> next to a check run, you&#8217;re brought to this page on GitHub:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="docs/media/screenshots/check-run-details.png" alt="check run details">
+</div>
+</div>
+<div class="paragraph">
+<p>This</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_video_walkthrough"><a class="anchor" href="#_video_walkthrough"></a><a class="link" href="#_video_walkthrough">1.1.3. Video walkthrough</a></h4>
+<div class="paragraph">
+<p>We walk you through the creation of a Pull Request and authoring the <code>/buildbot</code> comment in this in this short video: <a href="https://www.youtube.com/watch?v=9NpbKEmkvt8" class="bare">https://www.youtube.com/watch?v=9NpbKEmkvt8</a></p>
+</div>
 <div class="videoblock">
 <div class="title">A walkthrough video as a user for on-buildbot-comment scenario</div>
 <div class="content">
 <iframe width="1000" height="562" src="https://www.youtube.com/embed/9NpbKEmkvt8?rel=0&amp;theme=light" frameborder="0" allowfullscreen></iframe>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_uml_sequence_diagram"><a class="anchor" href="#_uml_sequence_diagram"></a><a class="link" href="#_uml_sequence_diagram">1.1.4. UML sequence diagram</a></h4>
+<div class="paragraph">
+<p>The sequence diagram for this scenario is layed out here. It includes some of the internals of the processing.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -582,10 +664,24 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="title">Figure 1. Sequence diagram for on-buildbot-comment scenario</div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_todos"><a class="anchor" href="#_todos"></a><a class="link" href="#_todos">1.1.5. TODOs</a></h4>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; Reset check run to neutral after Pull Request was updated.</p>
+</li>
+<li>
+<p>&#10063; Deal with buttons shown at the top of check run details page.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_developer_setup"><a class="anchor" href="#_developer_setup"></a><a class="link" href="#_developer_setup">3. Developer Setup</a></h2>
+<h2 id="_developer_setup"><a class="anchor" href="#_developer_setup"></a><a class="link" href="#_developer_setup">2. Developer Setup</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>I&#8217;m using a Fedora Linux 37 on my local machine and for most of the containers.</p>
@@ -636,10 +732,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_useful_links"><a class="anchor" href="#_useful_links"></a><a class="link" href="#_useful_links">4. Useful links</a></h2>
+<h2 id="_useful_links"><a class="anchor" href="#_useful_links"></a><a class="link" href="#_useful_links">3. Useful links</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_llvm_links"><a class="anchor" href="#_llvm_links"></a><a class="link" href="#_llvm_links">4.1. LLVM links</a></h3>
+<h3 id="_llvm_links"><a class="anchor" href="#_llvm_links"></a><a class="link" href="#_llvm_links">3.1. LLVM links</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -649,7 +745,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_github_app_documents"><a class="anchor" href="#_github_app_documents"></a><a class="link" href="#_github_app_documents">4.2. Github App documents</a></h3>
+<h3 id="_github_app_documents"><a class="anchor" href="#_github_app_documents"></a><a class="link" href="#_github_app_documents">3.2. Github App documents</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -662,7 +758,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_interacting_with_github"><a class="anchor" href="#_interacting_with_github"></a><a class="link" href="#_interacting_with_github">4.3. Interacting with Github</a></h3>
+<h3 id="_interacting_with_github"><a class="anchor" href="#_interacting_with_github"></a><a class="link" href="#_interacting_with_github">3.3. Interacting with Github</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -675,7 +771,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_golang_libraries"><a class="anchor" href="#_golang_libraries"></a><a class="link" href="#_golang_libraries">4.4. Golang libraries</a></h3>
+<h3 id="_golang_libraries"><a class="anchor" href="#_golang_libraries"></a><a class="link" href="#_golang_libraries">3.4. Golang libraries</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -702,7 +798,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_buildbot_links"><a class="anchor" href="#_buildbot_links"></a><a class="link" href="#_buildbot_links">5. Buildbot links</a></h2>
+<h2 id="_buildbot_links"><a class="anchor" href="#_buildbot_links"></a><a class="link" href="#_buildbot_links">4. Buildbot links</a></h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -715,7 +811,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_misc_links"><a class="anchor" href="#_misc_links"></a><a class="link" href="#_misc_links">5.1. Misc links</a></h3>
+<h3 id="_misc_links"><a class="anchor" href="#_misc_links"></a><a class="link" href="#_misc_links">4.1. Misc links</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -733,7 +829,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_todo"><a class="anchor" href="#_todo"></a><a class="link" href="#_todo">6. TODO</a></h2>
+<h2 id="_todo"><a class="anchor" href="#_todo"></a><a class="link" href="#_todo">5. TODO</a></h2>
 <div class="sectionbody">
 <div class="ulist checklist">
 <ul class="checklist">
@@ -750,7 +846,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-28 10:49:46 +0200
+Last updated 2023-04-28 12:45:12 +0200
 </div>
 </div>
 <script type="text/x-mathjax-config">

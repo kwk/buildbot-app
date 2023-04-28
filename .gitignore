@@ -2,6 +2,6 @@
 *.pem
 buildbot-app
 buildbot.tac
-local-test-infra/bb-master/cfg/master.cfg.bak
+infra/bb-master/cfg/master.cfg.bak
 master.cfg.sample
 state.sqlite

@@ -43,7 +43,7 @@ forwarder:
 ##   * index.html - rendered on https://kwk.github.io/buildbot-app/
 ##   * README.adoc - README on https://github.com/kwk/buildbot-app#readme
 docs:
-	$(MAKE) -C docs/media/
+	$(MAKE) -C docs/media
 	asciidoctor README.in.adoc --doctype article -o index.html
 	# Prepare asciidoc to be rendered on github
 	asciidoctor README.in.adoc --doctype article --backend docbook -o README.xml

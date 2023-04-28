@@ -1,4 +1,4 @@
-= Your Github App that talks to buildbot
+= Your GitHub App that talks to buildbot
 Konrad Kleine;
 :toc: left
 :toclevels: 5
@@ -12,25 +12,106 @@ Konrad Kleine;
 // :icons: font
 :source-highlighter: pygments
 
-// toc::[]Let’s build an app that lets you control your buildbot through
+// See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#admonitions
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+// See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#images
+ifdef::env-github[]
+:imagesdir: https://raw.githubusercontent.com/kwk/buildbot-app/main/
+endif::[]
+
+// toc::[]
+Let’s build an app that lets you control your buildbot through
 `/buildbot` comments on Github Pull Requests.
 
 image:docs/media/logo/logo-round-small.png[logo round small]
 
-[[_overview]]
-== Overview
-
-image:docs/media/developer-architecture-overview.png[developer
-architecture overview]
-
 [[_scenarios]]
 == Scenarios
 
-[[_comment_buildbot_on_pr]]
-=== Comment `/buildbot` on PR
+This section lists the ideas and sometimes even fully implemented
+scenarios we have for this GitHub app.
+
+[[_comment_buildbot_on_pull_request]]
+=== Comment `/buildbot` on Pull Request
+
+In this scenario a user authors a Pull Request comment with the comment
+body being `/buildbot`.
+
+image:docs/media/screenshots/author-buildbot-comment.png[author buildbot
+comment]
+
+The `buildbot-app` gets notified about a new comment and checks if it
+matches a regular expression. In this case the pattern is `^/buildbot$`
+but it could be much more complex and equipped with arguments, depending
+on the semantics we want to establish. For the purpose of this
+demonstration, `/buildbot` is simply enough.
+
+[[_build_log_comment]]
+==== Build Log Comment
+
+The `buildbot-app` then creates a *Thank-you*-comment that serves two
+purposes:
+
+[arabic]
+. It shows the user that we understood the request and are thankful for
+it and that we are working on it.
+. It is a perfect placeholder to store short build state changes for
+future lookups. That is why we call this comment the
+*build-log-comment*.
++
+image:docs/media/screenshots/build-log-comment.png[build log comment]
++
+Just imagine, your PR gets updated and you want to see the previous
+build results. The _build-log-comment_ is there for you too look it up.
+
+[[_check_run]]
+==== Check run
+
+Of course, we are also using GitHub’s check runs as you can see here:
+
+image:docs/media/screenshots/check-run-overview.png[check run overview]
+
+[NOTE]
+====
+I really like that we can dynamically create check runs on request and
+give them good names.
+====
+
+When you click on *Details* next to a check run, you’re brought to this
+page on GitHub:
+
+image:docs/media/screenshots/check-run-details.png[check run details]
+
+This
+
+[[_video_walkthrough]]
+==== Video walkthrough
+
+We walk you through the creation of a Pull Request and authoring the
+`/buildbot` comment in this in this short video:
+https://www.youtube.com/watch?v=9NpbKEmkvt8
+
+[[_uml_sequence_diagram]]
+==== UML sequence diagram
+
+The sequence diagram for this scenario is layed out here. It includes
+some of the internals of the processing.
 
 image::docs/media/on-buildbot-comment.svg[Sequence diagram for
 on-buildbot-comment scenario]
+
+[[_todos]]
+==== TODOs
+
+* ❏ Reset check run to neutral after Pull Request was updated.
+* ❏ Deal with buttons shown at the top of check run details page.
 
 [[_developer_setup]]
 == Developer Setup
