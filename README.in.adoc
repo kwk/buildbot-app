@@ -48,8 +48,6 @@ When you click on *Details* next to a check run, you're brought to this page on 
 
 image::docs/media/screenshots/check-run-details.png[]
 
-This 
-
 ==== Video walkthrough
 
 We walk you through the creation of a Pull Request and authoring the `/buildbot` comment in this in this short video: https://www.youtube.com/watch?v=9NpbKEmkvt8

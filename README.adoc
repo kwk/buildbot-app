@@ -89,8 +89,6 @@ page on GitHub:
 
 image:docs/media/screenshots/check-run-details.png[check run details]
 
-This
-
 [[_video_walkthrough]]
 ==== Video walkthrough
 
