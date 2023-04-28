@@ -1,4 +1,4 @@
-= Your GitHub App that talks to buildbot
+= Your GitHub App that talks to Buildbot
 Konrad Kleine;
 :toc: left
 :toclevels: 5

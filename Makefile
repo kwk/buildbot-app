@@ -44,7 +44,7 @@ forwarder:
 ##   * README.adoc - README on https://github.com/kwk/buildbot-app#readme
 docs:
 	$(MAKE) -C docs/media
-	asciidoctor README.in.adoc --doctype article -o index.html
+	asciidoctor -a docinfo2 README.in.adoc --doctype article -o index.html
 	# Prepare asciidoc to be rendered on github
 	asciidoctor README.in.adoc --doctype article --backend docbook -o README.xml
 	pandoc --from=docbook --to=asciidoc -o README.adoc.tmp README.xml
