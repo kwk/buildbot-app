@@ -36,7 +36,7 @@ EOF
 $ source ~/.bashrc # <5>
 $ direnv allow . # <6>
 $ make infra-start # <7>
-$ make app <8>
+$ make app # <8>
 ----
 <1> Clone the repo.
 <2> Install tools we need/use for development locally. If this was a deployment site the only requirement is buildbot so that the github app can make a call to `buildbot try`.
