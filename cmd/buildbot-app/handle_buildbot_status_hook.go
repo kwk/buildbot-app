@@ -77,7 +77,9 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 
 		conclusion := CheckRunStateFromBuildbotResult(buildStatus.Results)
 		if !buildStatus.Properties.GithubCheckRunMandatory {
-			conclusion = CheckRunConclusionNeutral
+			if conclusion != CheckRunConclusionSuccess {
+				conclusion = CheckRunConclusionNeutral
+			}
 		}
 
 		now := time.Now()
@@ -86,13 +88,17 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 			newStateString = strings.Join([]string{*checkRun.Output.Summary, WrapMsgWithTimePrefix(newStateString, now)}, "\n")
 		}
 
+		title := "Buildbot Status Log"
+		if buildStatus.Properties.GithubCheckRunMandatory {
+			title = fmt.Sprintf("%s (check is optional)", title)
+		}
 		_, _, err = gh.Checks.UpdateCheckRun(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], checkRunID, github.UpdateCheckRunOptions{
 			Name:       *checkRun.Name,
 			Status:     github.String(string(CheckRunStateCompleted)),
 			Conclusion: github.String(string(conclusion)),
 			DetailsURL: github.String(buildStatus.URL),
 			Output: &github.CheckRunOutput{
-				Title:   github.String("Buildbot Status Log"),
+				Title:   github.String(title),
 				Summary: github.String(newStateString),
 				Text:    github.String(fmt.Sprintf("[Buildbot Build Page](%s)", buildStatus.URL)),
 			},
