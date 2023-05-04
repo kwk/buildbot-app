@@ -601,7 +601,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>Internally a command comment will be converted into this structure:</p>
 </div>
-<div id="44e0f39b-96d2-4e6c-ac8e-4582c9c51837" class="listingblock">
+<div id="5e5c162c-4238-48a9-af73-832f251b357c" class="listingblock">
 <div class="title">Listing 1. Command structure (../cmd/buildbot-app/command/command.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -637,7 +637,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>There&#8217;s a regular expression that a string comment must match (see <code>StringIsCommand()</code>) in order for it to be a valid command string:</p>
 </div>
-<div id="f98f9c81-f5eb-490f-a7c6-c9ba16df808c" class="listingblock">
+<div id="67d25bf9-4853-42ae-aff6-e2c7cd130caf" class="listingblock">
 <div class="title">Listing 2. Regular Rexpression (cmd/buildbot-app/command/command.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -740,7 +740,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>The code for creating the comment is straight-forward:</p>
 </div>
-<div id="d7387c3c-7b72-44e6-9da3-3155ddad0b1f" class="listingblock">
+<div id="f21282fd-ceb1-4023-8a31-55ce16f3e757" class="listingblock">
 <div class="title">Listing 3. Thank You! (cmd/buildbot-app/on_issue_comment_event.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -838,7 +838,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>For example, when <code>/buildbot</code> comment is authored on a pull request we don&#8217;t want a build to run if the pull request is not mergable. Therefore we first have to take the event input and get the pull request from GitHub before we check if is mergable:</p>
 </div>
-<div id="50eab3cc-31fb-40bb-baa3-fe61889d2df4" class="listingblock">
+<div id="0e65f033-3636-489f-824a-e49082512c83" class="listingblock">
 <div class="title">Listing 4. Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -860,7 +860,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>In order to test that a PR is not mergable, we can simply create a valid <code>github.PullRequest</code>  object (see <code>prOK()</code>) and set the <code>Mergable</code> member to <code>false</code>. The mock server will return it as the first request and afterwards create a <code>POST</code> a comment about the pull request not being mergable:</p>
 </div>
-<div id="f333d561-2651-4617-9f8c-d6cc0b9bff0d" class="listingblock">
+<div id="66380a53-cdb8-40dc-bfae-d62634ad2521" class="listingblock">
 <div class="title">Listing 5. Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -918,7 +918,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>For this trick to work we have to use dependency injection by passing a Go interface (<code>Server</code>) instead of a real server object to functions in various places:</p>
 </div>
-<div id="909a6f87-6212-49af-b7af-5f18f384582b" class="listingblock">
+<div id="55acd2f7-c14b-494d-a885-ac5b423cb7f2" class="listingblock">
 <div class="title">Listing 6. Server interface (cmd/buildbot-app/server.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1128,12 +1128,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="sect2">
 <h3 id="_list_of_code_snippets"><a class="anchor" href="#_list_of_code_snippets"></a><a class="link" href="#_list_of_code_snippets">B.3. List of code snippets</a></h3>
 <div class="paragraph">
-<p><a href="#44e0f39b-96d2-4e6c-ac8e-4582c9c51837">Listing 1. </a>Command structure (../cmd/buildbot-app/command/command.go)<br>
-<a href="#f98f9c81-f5eb-490f-a7c6-c9ba16df808c">Listing 2. </a>Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
-<a href="#d7387c3c-7b72-44e6-9da3-3155ddad0b1f">Listing 3. </a>Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
-<a href="#50eab3cc-31fb-40bb-baa3-fe61889d2df4">Listing 4. </a>Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
-<a href="#f333d561-2651-4617-9f8c-d6cc0b9bff0d">Listing 5. </a>Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
-<a href="#909a6f87-6212-49af-b7af-5f18f384582b">Listing 6. </a>Server interface (cmd/buildbot-app/server.go)<br></p>
+<p><a href="#5e5c162c-4238-48a9-af73-832f251b357c">Listing 1. </a>Command structure (../cmd/buildbot-app/command/command.go)<br>
+<a href="#67d25bf9-4853-42ae-aff6-e2c7cd130caf">Listing 2. </a>Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
+<a href="#f21282fd-ceb1-4023-8a31-55ce16f3e757">Listing 3. </a>Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#0e65f033-3636-489f-824a-e49082512c83">Listing 4. </a>Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#66380a53-cdb8-40dc-bfae-d62634ad2521">Listing 5. </a>Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
+<a href="#55acd2f7-c14b-494d-a885-ac5b423cb7f2">Listing 6. </a>Server interface (cmd/buildbot-app/server.go)<br></p>
 </div>
 </div>
 </div>
@@ -1160,15 +1160,28 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <dl>
 <dt class="hdlist1">PR or Pull Request</dt>
 <dd>
-<p>"Pull requests let you tell others about changes you&#8217;ve pushed to a branch in a repository on GitHub. Once a pull request is opened, you can discuss and review the potential changes with collaborators and add follow-up commits before your changes are merged into the base branch." (<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">source</a>)</p>
+<p>"Pull requests let you tell others about changes you&#8217;ve pushed to a branch in a repository on GitHub. Once a pull request is opened, you can discuss and review the potential changes with collaborators and add follow-up commits before your changes are merged into the base branch."
+  &#8201;&#8212;&#8201;(<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">About pull requests</a>)</p>
 </dd>
 <dt class="hdlist1">Buildmaster or Buildbot Master</dt>
 <dd>
-<p>"Buildbot consists of a single buildmaster and one or more workers that connect to the master. The buildmaster makes all decisions about what, when, and how to build." (<a href="https://docs.buildbot.net/latest/manual/introduction.html#system-architecture">source</a>)</p>
+<p>"Buildbot consists of a single buildmaster and one or more workers that connect to the master. The buildmaster makes all decisions about what, when, and how to build."&#8201;&#8212;&#8201;(<a href="https://docs.buildbot.net/latest/manual/introduction.html">Buildbot System Architecture</a>)</p>
 </dd>
 <dt class="hdlist1">Buildbot Worker</dt>
 <dd>
-<p>"The workers only connect to master and execute whatever commands they are instructed to execute." (<a href="https://docs.buildbot.net/latest/manual/introduction.html#system-architecture">source</a>)</p>
+<p>"The workers only connect to master and execute whatever commands they are instructed to execute."&#8201;&#8212;&#8201;(<a href="https://docs.buildbot.net/latest/manual/introduction.html">Buildbot System Architecture</a>)</p>
+</dd>
+<dt class="hdlist1">Builder</dt>
+<dd>
+<p>"A builder is a user-configurable description of how to perform a build. It defines what steps a new build will have, what workers it may run on and a couple of other properties. A builder takes a build request which specifies the intention to create a build for specific versions of code and produces a build which is a concrete description of a build including a list of steps to perform, the worker this needs to be performed on and so on."&#8201;&#8212;&#8201;(<a href="https://docs.buildbot.net/latest/manual/introduction.html">Buildbot System Architecture</a>)</p>
+</dd>
+<dt class="hdlist1">Scheduler</dt>
+<dd>
+<p>"A scheduler is a user-configurable component that decides when to start a build. The decision could be based on time, on new code being committed or on similar events."&#8201;&#8212;&#8201;(<a href="https://docs.buildbot.net/latest/manual/introduction.html">Buildbot System Architecture</a>)</p>
+</dd>
+<dt class="hdlist1">Reporters</dt>
+<dd>
+<p>Reporters are user-configurable components that send information about started or completed builds to external sources. Buildbot provides its own web application to observe this data, so reporters are optional. However they can be used to provide up to date build status on platforms such as GitHub or sending emails.&#8201;&#8212;&#8201;(<a href="https://docs.buildbot.net/latest/manual/introduction.html">Introduction</a>)</p>
 </dd>
 </dl>
 </div>
@@ -1177,7 +1190,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-05-04 11:02:18 +0200
+Last updated 2023-05-04 13:07:50 +0200
 </div>
 </div>
 <script type="text/x-mathjax-config">
