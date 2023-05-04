@@ -1,6 +1,6 @@
 .envrc
 *.pem
-buildbot-app
+./buildbot-app
 buildbot.tac
 infra/bb-master/cfg/master.cfg.bak
 master.cfg.sample

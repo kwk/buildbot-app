@@ -17,7 +17,7 @@ func main() {
 	srv.GithubEventHandler.OnPingEventAny(srv.OnPingEventAny())
 
 	// This is where we're going to handle /buildbot comments made on github
-	srv.GithubEventHandler.OnIssueCommentEventAny(srv.OnIssueCommentEventAny())
+	srv.GithubEventHandler.OnIssueCommentEventAny(OnIssueCommentEventAny(srv))
 
 	// When buildbot wants to talk to the Github App it can use this endpoint
 	srv.Mux.HandleFunc("/buildbot-hook", srv.HandleBuildBotHook())

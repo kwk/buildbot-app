@@ -1,5 +1,6 @@
-= Your GitHub App that talks to Buildbot
-Konrad Kleine;
+= Your GitHub App that lets you talk to Buildbot
+Konrad Kleine <kkleine@redhat.com>;
+:description: A study to showcase how GitHub pull request comments and Check Runs can be used in combination with aminimally modified buildbot.
 :toc: left
 :toclevels: 5
 :showtitle:
@@ -21,9 +22,10 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
+// We always want our images to be displayed directly from github
 // See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#images
-ifdef::env-github[]
+// ifdef::env-github[]
 :imagesdir: https://raw.githubusercontent.com/kwk/buildbot-app/main/
-endif::[]
+// endif::[]
 
 // toc::[]
