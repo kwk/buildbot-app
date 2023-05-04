@@ -1,4 +1,7 @@
 @startuml on-buildbot-comment
+!theme cerulean
+' good themes: vibrant, toy, cerulean, bluegray, lightgray, materia, plain
+
 ' For on-the-fly rendering of the latest version of this diagram, please visit:
 ' http://www.plantuml.com/plantuml/proxy?idx=0&src=https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/on-buildbot-comment.puml&fmt=svg
 '
@@ -18,17 +21,17 @@ end title
 ' the bottom which is nice for a big diagram
 ' skinparam style strictuml
 
-skinparam monochrome false
-skinparam SequenceBoxBackgroundColor #efefef
-skinparam SequenceBoxBorderColor #aeaeae
-skinparam roundcorner 20
+' skinparam monochrome false
+' skinparam SequenceBoxBackgroundColor #efefef
+' skinparam SequenceBoxBorderColor #aeaeae
+' skinparam roundcorner 20
 skinparam SequenceGroupBackgroundColor #718fbf
 skinparam SequenceGroupHeaderFontColor #ffffff
 skinparam SequenceGroupBodyBackgroundColor #9dc1fc90
-' Style participants
-skinparam ParticipantBackgroundColor #efefef
-skinparam ParticipantBorderColor #efefef
-skinparam defaultFontName Red Hat Display Regular
+' ' Style participants
+' skinparam ParticipantBackgroundColor #efefef
+' skinparam ParticipantBorderColor #efefef
+' skinparam defaultFontName Red Hat Display Regular
 
 actor "Alice" as alice
 

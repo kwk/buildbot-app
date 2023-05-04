@@ -1,3 +1,6 @@
+<!-- DO NOT MODIFY THIS DOCUMENT DIRECTLY! -->
+<!-- MODIFY docs/README.in.adoc INSTEAD! --> 
+<!-- THEN RUN make docs! -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +8,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="description" content="A study to showcase how GitHub pull request comments and Check Runs can be used in combination with aminimally modified buildbot.">
 <meta name="author" content="Konrad Kleine">
-<title>Your GitHub App that talks to Buildbot</title>
+<title>Your GitHub App that lets you talk to Buildbot</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -507,18 +511,13 @@ pre.pygments .tok-vi { color: #19177C } /* Name.Variable.Instance */
 pre.pygments .tok-vm { color: #19177C } /* Name.Variable.Magic */
 pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </style>
-<!-- This style is picked up by asciidoctor through the "-a docinfo2" attribute-->
-<style>
-.imageblock.screenshot {
-    padding: 3em;
-}
-</style>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Your GitHub App that talks to Buildbot</h1>
+<h1>Your GitHub App that lets you talk to Buildbot</h1>
 <div class="details">
 <span id="author" class="author">Konrad Kleine</span><br>
+<span id="email" class="email"><a href="mailto:kkleine@redhat.com">kkleine@redhat.com</a></span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -531,26 +530,39 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_check_run">1.1.2. Check run</a></li>
 <li><a href="#_video_walkthrough">1.1.3. Video walkthrough</a></li>
 <li><a href="#_uml_sequence_diagram">1.1.4. UML sequence diagram</a></li>
-<li><a href="#_todos">1.1.5. TODOs</a></li>
+</ul>
+</li>
+<li><a href="#_testing">1.2. Testing</a>
+<ul class="sectlevel3">
+<li><a href="#_testing_github_interaction">1.2.1. Testing GitHub interaction</a></li>
+<li><a href="#_todos">1.2.2. TODOs</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_developer_setup">2. Developer Setup</a></li>
-<li><a href="#_useful_links">3. Useful links</a>
+<li><a href="#_useful_links">Appendix A: Useful links</a>
 <ul class="sectlevel2">
-<li><a href="#_llvm_links">3.1. LLVM links</a></li>
-<li><a href="#_github_app_documents">3.2. Github App documents</a></li>
-<li><a href="#_interacting_with_github">3.3. Interacting with Github</a></li>
-<li><a href="#_golang_libraries">3.4. Golang libraries</a></li>
+<li><a href="#_llvm_links">A.1. LLVM links</a></li>
+<li><a href="#_github_app_documents">A.2. Github App documents</a></li>
+<li><a href="#_interacting_with_github">A.3. Interacting with Github</a></li>
+<li><a href="#_golang_libraries">A.4. Golang libraries</a></li>
 </ul>
 </li>
-<li><a href="#_buildbot_links">4. Buildbot links</a>
+<li><a href="#_buildbot_links">3. Buildbot links</a>
 <ul class="sectlevel2">
-<li><a href="#_misc_links">4.1. Misc links</a></li>
+<li><a href="#_misc_links">3.1. Misc links</a></li>
 </ul>
 </li>
-<li><a href="#_todo">5. TODO</a></li>
+<li><a href="#_lists">Appendix B: Lists</a>
+<ul class="sectlevel2">
+<li><a href="#_list_of_figures">B.1. List of figures</a></li>
+<li><a href="#_list_of_tables">B.2. List of tables</a></li>
+<li><a href="#_list_of_code_snippets">B.3. List of code snippets</a></li>
+</ul>
+</li>
+<li><a href="#_todo">Appendix C: TODO</a></li>
+<li><a href="#_terminology">Terminology</a></li>
 </ul>
 </div>
 </div>
@@ -558,11 +570,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph lead">
-<p>Let&#8217;s build an app that lets you control your buildbot through <code>/buildbot</code> comments on Github Pull Requests.</p>
+<p>Let&#8217;s build GitHub app that lets you control your buildbot through <code>/buildbot</code> comments on GitHub Pull Requests.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="docs/media/logo/logo-round-small.png" alt="logo round small">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/logo/logo-round-small.png" alt="logo round small">
 </div>
 </div>
 </div>
@@ -580,11 +592,127 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="imageblock screenshot">
 <div class="content">
-<img src="docs/media/screenshots/author-buildbot-comment.png" alt="author buildbot comment">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/screenshots/author-buildbot-comment.png" alt="author buildbot comment">
 </div>
 </div>
 <div class="paragraph">
 <p>The <code>buildbot-app</code> gets notified about a new comment and checks if it matches a regular expression. In this case the pattern is <code>^/buildbot$</code> but it could be much more complex and equipped with arguments, depending on the semantics we want to establish. For the purpose of this demonstration, <code>/buildbot</code> is simply enough.</p>
+</div>
+<div class="paragraph">
+<p>Internally a command comment will be converted into this structure:</p>
+</div>
+<div id="44e0f39b-96d2-4e6c-ac8e-4582c9c51837" class="listingblock">
+<div class="title">Listing 1. Command structure (../cmd/buildbot-app/command/command.go)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><pre><span></span><span class="tok-c1">// A Command represents all information about a /buildbot command</span>
+<span class="tok-kd">type</span> <span class="tok-nx">Command</span> <span class="tok-kd">struct</span> <span class="tok-p">{</span>
+	<span class="tok-c1">// When true, the command has to pass for the PR in order pass gating</span>
+	<span class="tok-c1">// (default: true).</span>
+	<span class="tok-nx">IsMandatory</span> <span class="tok-kt">bool</span>
+	<span class="tok-c1">// Case-sensitive, sorted list of builders without duplicates to run build on.</span>
+	<span class="tok-c1">// TODO(kwk): Maybe we can default to something reasonable here?</span>
+	<span class="tok-nx">BuilderNames</span> <span class="tok-p">[]</span><span class="tok-kt">string</span>
+	<span class="tok-c1">// The user&#39;s GitHub login that issued the /buildbot comment</span>
+	<span class="tok-nx">CommentAuthor</span> <span class="tok-kt">string</span>
+	<span class="tok-c1">// When true, we&#39;ll try to run the build even if the PR has already been</span>
+	<span class="tok-c1">// tested at this stage (default: false).</span>
+	<span class="tok-nx">Force</span> <span class="tok-kt">bool</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There&#8217;s a regular expression that a string comment must match (see <code>StringIsCommand()</code>) in order for it to be a valid command string:</p>
+</div>
+<div id="f98f9c81-f5eb-490f-a7c6-c9ba16df808c" class="listingblock">
+<div class="title">Listing 2. Regular Rexpression (cmd/buildbot-app/command/command.go)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kd">const</span> <span class="tok-p">(</span>
+	<span class="tok-c1">// BuildbotCommand is the command that triggers the buildbot workflow in a</span>
+	<span class="tok-c1">// GitHub comment.</span>
+	<span class="tok-nx">BuildbotCommand</span> <span class="tok-p">=</span> <span class="tok-s">&quot;/buildbot&quot;</span>
+
+	<span class="tok-c1">// CommandOptionMandatory is the boolean option to make a check run</span>
+	<span class="tok-c1">// mandatory.</span>
+	<span class="tok-nx">CommandOptionMandatory</span> <span class="tok-p">=</span> <span class="tok-s">&quot;mandatory&quot;</span>
+
+	<span class="tok-c1">// CommandOptionBuilder is the option that can be used multiple times in a</span>
+	<span class="tok-c1">// command comment. The resulting builders will be a case-sensitive, sorted</span>
+	<span class="tok-c1">// list of builders with no duplicates.</span>
+	<span class="tok-nx">CommandOptionBuilder</span> <span class="tok-p">=</span> <span class="tok-s">&quot;builder&quot;</span>
+
+	<span class="tok-c1">// CommandOptionForce is the boolean option to enforce a new build even if</span>
+	<span class="tok-c1">// one is already present.</span>
+	<span class="tok-nx">CommandOptionForce</span> <span class="tok-p">=</span> <span class="tok-s">&quot;force&quot;</span>
+<span class="tok-p">)</span>
+
+<span class="tok-c1">// StringIsCommand returns true if the given string is a valid /buildbot command.</span>
+<span class="tok-kd">func</span> <span class="tok-nx">StringIsCommand</span><span class="tok-p">(</span><span class="tok-nx">s</span> <span class="tok-kt">string</span><span class="tok-p">)</span> <span class="tok-kt">bool</span> <span class="tok-p">{</span>
+	<span class="tok-c1">// force=yes|no : Can be used to allow for PRs to be build even when</span>
+	<span class="tok-c1">// they are closed or when a check run for the exact same SHA has been</span>
+	<span class="tok-c1">// run already.</span>
+	<span class="tok-k">return</span> <span class="tok-nx">regexp</span><span class="tok-p">.</span><span class="tok-nx">MustCompile</span><span class="tok-p">(</span><span class="tok-nx">buildRegexPattern</span><span class="tok-p">()).</span><span class="tok-nx">MatchString</span><span class="tok-p">(</span><span class="tok-nx">s</span><span class="tok-p">)</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// buildRegexPattern returns the regex pattern to match a string against a</span>
+<span class="tok-c1">// /buildbot command</span>
+<span class="tok-kd">func</span> <span class="tok-nx">buildRegexPattern</span><span class="tok-p">()</span> <span class="tok-kt">string</span> <span class="tok-p">{</span>
+	<span class="tok-nx">tfOptions</span> <span class="tok-o">:=</span> <span class="tok-s">`(yes|no|true|false|f|t|y|n|0|1)`</span>
+	<span class="tok-nx">mandatoryOption</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=%s`</span><span class="tok-p">,</span> <span class="tok-nx">CommandOptionMandatory</span><span class="tok-p">,</span> <span class="tok-nx">tfOptions</span><span class="tok-p">)</span>
+	<span class="tok-nx">forceOption</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=%s`</span><span class="tok-p">,</span> <span class="tok-nx">CommandOptionForce</span><span class="tok-p">,</span> <span class="tok-nx">tfOptions</span><span class="tok-p">)</span>
+	<span class="tok-nx">builderOption</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=(\w+)`</span><span class="tok-p">,</span> <span class="tok-nx">CommandOptionBuilder</span><span class="tok-p">)</span>
+	<span class="tok-k">return</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`^%s(\s+|%s|%s|%s)*$`</span><span class="tok-p">,</span> <span class="tok-nx">BuildbotCommand</span><span class="tok-p">,</span> <span class="tok-nx">mandatoryOption</span><span class="tok-p">,</span> <span class="tok-nx">forceOption</span><span class="tok-p">,</span> <span class="tok-nx">builderOption</span><span class="tok-p">)</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_build_log_comment"><a class="anchor" href="#_build_log_comment"></a><a class="link" href="#_build_log_comment">1.1.1. Build Log Comment</a></h4>
@@ -600,7 +728,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>It is a perfect placeholder to store short build state changes for future lookups. That is why we call this comment the <strong>build-log-comment</strong>.</p>
 <div class="imageblock screenshot">
 <div class="content">
-<img src="docs/media/screenshots/build-log-comment.png" alt="build log comment">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/build-log-comment.png" alt="build log comment">
 </div>
 </div>
 <div class="paragraph">
@@ -608,6 +736,40 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>The code for creating the comment is straight-forward:</p>
+</div>
+<div id="d7387c3c-7b72-44e6-9da3-3155ddad0b1f" class="listingblock">
+<div class="title">Listing 3. Thank You! (cmd/buildbot-app/on_issue_comment_event.go)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><pre><span></span>		<span class="tok-c1">// This comment will be used all over the place</span>
+		<span class="tok-nx">thankYouComment</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span>
+			<span class="tok-s">`Thank you @%s for using the &lt;a href=&quot;todo:link-to-documentation-here&quot;&gt;&lt;code&gt;%s&lt;/code&gt;&lt;/a&gt; command &lt;a href=&quot;%s&quot;&gt;here&lt;/a&gt;! `</span><span class="tok-p">,</span>
+			<span class="tok-nx">command</span><span class="tok-p">.</span><span class="tok-nx">BuildbotCommand</span><span class="tok-p">,</span>
+			<span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">User</span><span class="tok-p">.</span><span class="tok-nx">Login</span><span class="tok-p">,</span>
+			<span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">HTMLURL</span><span class="tok-p">,</span>
+		<span class="tok-p">)</span>
+
+		<span class="tok-nx">newComment</span><span class="tok-p">,</span> <span class="tok-nx">_</span><span class="tok-p">,</span> <span class="tok-nx">err</span> <span class="tok-o">:=</span> <span class="tok-nx">gh</span><span class="tok-p">.</span><span class="tok-nx">Issues</span><span class="tok-p">.</span><span class="tok-nx">CreateComment</span><span class="tok-p">(</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">Background</span><span class="tok-p">(),</span> <span class="tok-nx">repoOwner</span><span class="tok-p">,</span> <span class="tok-nx">repoName</span><span class="tok-p">,</span> <span class="tok-nx">prNumber</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">IssueComment</span><span class="tok-p">{</span>
+			<span class="tok-nx">Body</span><span class="tok-p">:</span> <span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">String</span><span class="tok-p">(</span><span class="tok-nx">thankYouComment</span> <span class="tok-o">+</span>
+				<span class="tok-s">`&lt;sub&gt;This very comment will be used to continously log build state changes for your request. We decided to do this in addition to using Github&#39;s Check Runs below so you can inspect previous check runs better.&lt;/sub&gt;`</span><span class="tok-p">,</span>
+			<span class="tok-p">),</span>
+		<span class="tok-p">})</span>
+</pre></td></tr></table></code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -617,7 +779,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="imageblock screenshot">
 <div class="content">
-<img src="docs/media/screenshots/check-run-overview.png" alt="check run overview">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/check-run-overview.png" alt="check run overview">
 </div>
 </div>
 <div class="admonitionblock note">
@@ -639,7 +801,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="imageblock screenshot">
 <div class="content">
-<img src="docs/media/screenshots/check-run-details.png" alt="check run details">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/check-run-details.png" alt="check run details">
 </div>
 </div>
 </div>
@@ -661,12 +823,131 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="docs/media/on-buildbot-comment.svg" alt="on buildbot comment">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/media/on-buildbot-comment.svg" alt="on buildbot comment">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_testing"><a class="anchor" href="#_testing"></a><a class="link" href="#_testing">1.2. Testing</a></h3>
+<div class="sect3">
+<h4 id="_testing_github_interaction"><a class="anchor" href="#_testing_github_interaction"></a><a class="link" href="#_testing_github_interaction">1.2.1. Testing GitHub interaction</a></h4>
+<div class="paragraph">
+<p>We&#8217;re using a fantastic library to run to simulate sequential GitHub interaction: <a href="https://github.com/migueleliasweb/go-github-mock" class="bare">https://github.com/migueleliasweb/go-github-mock</a>.</p>
+</div>
+<div class="paragraph">
+<p>For example, when <code>/buildbot</code> comment is authored on a pull request we don&#8217;t want a build to run if the pull request is not mergable. Therefore we first have to take the event input and get the pull request from GitHub before we check if is mergable:</p>
+</div>
+<div id="50eab3cc-31fb-40bb-baa3-fe61889d2df4" class="listingblock">
+<div class="title">Listing 4. Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><pre><span></span>		<span class="tok-nx">commentUser</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">User</span><span class="tok-p">.</span><span class="tok-nx">Login</span>
+		<span class="tok-nx">repoOwner</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Repo</span><span class="tok-p">.</span><span class="tok-nx">Owner</span><span class="tok-p">.</span><span class="tok-nx">Login</span>
+		<span class="tok-nx">repoName</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Repo</span><span class="tok-p">.</span><span class="tok-nx">Name</span>
+		<span class="tok-nx">prNumber</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Issue</span><span class="tok-p">.</span><span class="tok-nx">Number</span>
+		<span class="tok-nx">pr</span><span class="tok-p">,</span> <span class="tok-nx">_</span><span class="tok-p">,</span> <span class="tok-nx">err</span> <span class="tok-o">:=</span> <span class="tok-nx">gh</span><span class="tok-p">.</span><span class="tok-nx">PullRequests</span><span class="tok-p">.</span><span class="tok-nx">Get</span><span class="tok-p">(</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">Background</span><span class="tok-p">(),</span> <span class="tok-nx">repoOwner</span><span class="tok-p">,</span> <span class="tok-nx">repoName</span><span class="tok-p">,</span> <span class="tok-nx">prNumber</span><span class="tok-p">)</span>
+		<span class="tok-k">if</span> <span class="tok-p">!</span><span class="tok-nx">pr</span><span class="tok-p">.</span><span class="tok-nx">GetMergeable</span><span class="tok-p">()</span> <span class="tok-p">{</span>
+		<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to test that a PR is not mergable, we can simply create a valid <code>github.PullRequest</code>  object (see <code>prOK()</code>) and set the <code>Mergable</code> member to <code>false</code>. The mock server will return it as the first request and afterwards create a <code>POST</code> a comment about the pull request not being mergable:</p>
+</div>
+<div id="f333d561-2651-4617-9f8c-d6cc0b9bff0d" class="listingblock">
+<div class="title">Listing 5. Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kd">func</span> <span class="tok-nx">TestOnIssueCommentEventAny</span><span class="tok-p">(</span><span class="tok-nx">t</span> <span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+	<span class="tok-nx">t</span><span class="tok-p">.</span><span class="tok-nx">Run</span><span class="tok-p">(</span><span class="tok-s">&quot;pr not mergable&quot;</span><span class="tok-p">,</span> <span class="tok-kd">func</span><span class="tok-p">(</span><span class="tok-nx">t</span> <span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+		<span class="tok-nx">t</span><span class="tok-p">.</span><span class="tok-nx">Run</span><span class="tok-p">(</span><span class="tok-s">&quot;comment writable&quot;</span><span class="tok-p">,</span> <span class="tok-kd">func</span><span class="tok-p">(</span><span class="tok-nx">t</span> <span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+			<span class="tok-nx">prNotMergable</span> <span class="tok-o">:=</span> <span class="tok-nx">prOK</span><span class="tok-p">()</span>
+			<span class="tok-nx">prNotMergable</span><span class="tok-p">.</span><span class="tok-nx">Mergeable</span> <span class="tok-p">=</span> <span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">Bool</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">)</span>
+			<span class="tok-nx">srv</span> <span class="tok-o">:=</span> <span class="tok-nx">NewMockServer</span><span class="tok-p">(</span>
+				<span class="tok-c1">// Get PR for comment event</span>
+				<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">WithRequestMatch</span><span class="tok-p">(</span>
+					<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">GetReposPullsByOwnerByRepoByPullNumber</span><span class="tok-p">,</span>
+					<span class="tok-nx">prNotMergable</span><span class="tok-p">,</span>
+				<span class="tok-p">),</span>
+				<span class="tok-c1">// Create comment on about PR not being mergable</span>
+				<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">WithRequestMatch</span><span class="tok-p">(</span>
+					<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">PostReposIssuesCommentsByOwnerByRepoByIssueNumber</span><span class="tok-p">,</span>
+					<span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">IssueComment</span><span class="tok-p">{</span>
+						<span class="tok-nx">Body</span><span class="tok-p">:</span> <span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">String</span><span class="tok-p">(</span><span class="tok-s">&quot;blabla&quot;</span><span class="tok-p">),</span>
+					<span class="tok-p">},</span>
+				<span class="tok-p">),</span>
+			<span class="tok-p">)</span>
+			<span class="tok-nx">fn</span> <span class="tok-o">:=</span> <span class="tok-nx">OnIssueCommentEventAny</span><span class="tok-p">(</span><span class="tok-nx">srv</span><span class="tok-p">)</span>
+			<span class="tok-nx">err</span> <span class="tok-o">:=</span> <span class="tok-nx">fn</span><span class="tok-p">(</span><span class="tok-s">&quot;1234&quot;</span><span class="tok-p">,</span> <span class="tok-s">&quot;created&quot;</span><span class="tok-p">,</span> <span class="tok-nx">issueCommentEventOK</span><span class="tok-p">())</span>
+			<span class="tok-nx">require</span><span class="tok-p">.</span><span class="tok-nx">ErrorContains</span><span class="tok-p">(</span><span class="tok-nx">t</span><span class="tok-p">,</span> <span class="tok-nx">err</span><span class="tok-p">,</span> <span class="tok-s">&quot;pr is not mergable&quot;</span><span class="tok-p">,</span> <span class="tok-s">&quot;expected and error because pr is not mergable, yet&quot;</span><span class="tok-p">)</span>
+		<span class="tok-p">})</span>
+	<span class="tok-p">})</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For this trick to work we have to use dependency injection by passing a Go interface (<code>Server</code>) instead of a real server object to functions in various places:</p>
+</div>
+<div id="909a6f87-6212-49af-b7af-5f18f384582b" class="listingblock">
+<div class="title">Listing 6. Server interface (cmd/buildbot-app/server.go)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><pre><span></span><span class="tok-c1">// Server specifies the interface that we need to implement from the AppServer</span>
+<span class="tok-c1">// object in order to provide a decent mock in tests.</span>
+<span class="tok-kd">type</span> <span class="tok-nx">Server</span> <span class="tok-kd">interface</span> <span class="tok-p">{</span>
+
+	<span class="tok-c1">// NewGithubClient returns a new GitHub client object for the given</span>
+	<span class="tok-c1">// application ID.</span>
+	<span class="tok-nx">NewGithubClient</span><span class="tok-p">(</span><span class="tok-nx">appInstallationID</span> <span class="tok-kt">int64</span><span class="tok-p">)</span> <span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">Client</span><span class="tok-p">,</span> <span class="tok-kt">error</span><span class="tok-p">)</span>
+
+	<span class="tok-c1">// RunTryBot runs a &quot;buildbot try&quot; command</span>
+	<span class="tok-nx">RunTryBot</span><span class="tok-p">(</span><span class="tok-nx">responsibleGithubLogin</span> <span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-nx">githubRepoOwner</span> <span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-nx">githubRepoName</span> <span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-nx">properties</span> <span class="tok-o">...</span><span class="tok-kt">string</span><span class="tok-p">)</span> <span class="tok-p">(</span><span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-kt">error</span><span class="tok-p">)</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_todos"><a class="anchor" href="#_todos"></a><a class="link" href="#_todos">1.1.5. TODOs</a></h4>
+<h4 id="_todos"><a class="anchor" href="#_todos"></a><a class="link" href="#_todos">1.2.2. TODOs</a></h4>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
@@ -691,15 +972,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="content">
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>git clone https://github.com/kwk/buildbot-app.git <span class="tok-o">&amp;&amp;</span> <span class="tok-nb">cd</span> buildbot-app # <b class="conum">(1)</b>
 <span class="tok-gp">$ </span>sudo dnf install -y direnv golang podman podman-compose buildbot pandic asciidoctor # <b class="conum">(2)</b>
-<span class="tok-gp">$ </span>go install github.com/cespare/reflex@latest # <b class="conum">(3)</b>
-<span class="tok-gp">$ </span>cat &lt;&lt;EOF &gt;&gt; ~/.bashrc # <b class="conum">(4)</b>
+<span class="tok-gp">$ </span>gem install asciidoctor-lists # <b class="conum">(3)</b>
+<span class="tok-gp">$ </span>go install github.com/cespare/reflex@latest # <b class="conum">(4)</b>
+<span class="tok-gp">$ </span>cat &lt;&lt;EOF &gt;&gt; ~/.bashrc # <b class="conum">(5)</b>
 <span class="tok-go">export PATH=\${PATH}:~/go/bin</span>
 <span class="tok-go">eval &quot;\$(direnv hook bash)&quot;</span>
 <span class="tok-go">EOF</span>
-<span class="tok-gp">$ </span><span class="tok-nb">source</span> ~/.bashrc # <b class="conum">(5)</b>
-<span class="tok-gp">$ </span>direnv allow . # <b class="conum">(6)</b>
-<span class="tok-gp">$ </span>make infra-start # <b class="conum">(7)</b>
-<span class="tok-gp">$ </span>make app # <b class="conum">(8)</b></code></pre>
+<span class="tok-gp">$ </span><span class="tok-nb">source</span> ~/.bashrc # <b class="conum">(6)</b>
+<span class="tok-gp">$ </span>direnv allow . # <b class="conum">(7)</b>
+<span class="tok-gp">$ </span>make infra-start # <b class="conum">(8)</b>
+<span class="tok-gp">$ </span>make app # <b class="conum">(9)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -709,6 +991,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li>
 <p>Install tools we need/use for development locally. If this was a deployment site the only requirement is buildbot so that the github app can make a call to <code>buildbot try</code>.</p>
+</li>
+<li>
+<p>Install extension to create list of figures etc.</p>
 </li>
 <li>
 <p>Install hot-reload tool.</p>
@@ -733,10 +1018,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_useful_links"><a class="anchor" href="#_useful_links"></a><a class="link" href="#_useful_links">3. Useful links</a></h2>
+<h2 id="_useful_links"><a class="anchor" href="#_useful_links"></a><a class="link" href="#_useful_links">Appendix A: Useful links</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_llvm_links"><a class="anchor" href="#_llvm_links"></a><a class="link" href="#_llvm_links">3.1. LLVM links</a></h3>
+<h3 id="_llvm_links"><a class="anchor" href="#_llvm_links"></a><a class="link" href="#_llvm_links">A.1. LLVM links</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -746,7 +1031,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_github_app_documents"><a class="anchor" href="#_github_app_documents"></a><a class="link" href="#_github_app_documents">3.2. Github App documents</a></h3>
+<h3 id="_github_app_documents"><a class="anchor" href="#_github_app_documents"></a><a class="link" href="#_github_app_documents">A.2. Github App documents</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -759,7 +1044,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_interacting_with_github"><a class="anchor" href="#_interacting_with_github"></a><a class="link" href="#_interacting_with_github">3.3. Interacting with Github</a></h3>
+<h3 id="_interacting_with_github"><a class="anchor" href="#_interacting_with_github"></a><a class="link" href="#_interacting_with_github">A.3. Interacting with Github</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -772,7 +1057,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_golang_libraries"><a class="anchor" href="#_golang_libraries"></a><a class="link" href="#_golang_libraries">3.4. Golang libraries</a></h3>
+<h3 id="_golang_libraries"><a class="anchor" href="#_golang_libraries"></a><a class="link" href="#_golang_libraries">A.4. Golang libraries</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -799,7 +1084,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_buildbot_links"><a class="anchor" href="#_buildbot_links"></a><a class="link" href="#_buildbot_links">4. Buildbot links</a></h2>
+<h2 id="_buildbot_links"><a class="anchor" href="#_buildbot_links"></a><a class="link" href="#_buildbot_links">3. Buildbot links</a></h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -812,7 +1097,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_misc_links"><a class="anchor" href="#_misc_links"></a><a class="link" href="#_misc_links">4.1. Misc links</a></h3>
+<h3 id="_misc_links"><a class="anchor" href="#_misc_links"></a><a class="link" href="#_misc_links">3.1. Misc links</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -830,7 +1115,31 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_todo"><a class="anchor" href="#_todo"></a><a class="link" href="#_todo">5. TODO</a></h2>
+<h2 id="_lists"><a class="anchor" href="#_lists"></a><a class="link" href="#_lists">Appendix B: Lists</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_list_of_figures"><a class="anchor" href="#_list_of_figures"></a><a class="link" href="#_list_of_figures">B.1. List of figures</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_list_of_tables"><a class="anchor" href="#_list_of_tables"></a><a class="link" href="#_list_of_tables">B.2. List of tables</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_list_of_code_snippets"><a class="anchor" href="#_list_of_code_snippets"></a><a class="link" href="#_list_of_code_snippets">B.3. List of code snippets</a></h3>
+<div class="paragraph">
+<p><a href="#44e0f39b-96d2-4e6c-ac8e-4582c9c51837">Listing 1. </a>Command structure (../cmd/buildbot-app/command/command.go)<br>
+<a href="#f98f9c81-f5eb-490f-a7c6-c9ba16df808c">Listing 2. </a>Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
+<a href="#d7387c3c-7b72-44e6-9da3-3155ddad0b1f">Listing 3. </a>Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#50eab3cc-31fb-40bb-baa3-fe61889d2df4">Listing 4. </a>Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#f333d561-2651-4617-9f8c-d6cc0b9bff0d">Listing 5. </a>Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
+<a href="#909a6f87-6212-49af-b7af-5f18f384582b">Listing 6. </a>Server interface (cmd/buildbot-app/server.go)<br></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todo"><a class="anchor" href="#_todo"></a><a class="link" href="#_todo">Appendix C: TODO</a></h2>
 <div class="sectionbody">
 <div class="ulist checklist">
 <ul class="checklist">
@@ -844,10 +1153,31 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_terminology"><a class="anchor" href="#_terminology"></a><a class="link" href="#_terminology">Terminology</a></h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">PR or Pull Request</dt>
+<dd>
+<p>"Pull requests let you tell others about changes you&#8217;ve pushed to a branch in a repository on GitHub. Once a pull request is opened, you can discuss and review the potential changes with collaborators and add follow-up commits before your changes are merged into the base branch." (<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">source</a>)</p>
+</dd>
+<dt class="hdlist1">Buildmaster or Buildbot Master</dt>
+<dd>
+<p>"Buildbot consists of a single buildmaster and one or more workers that connect to the master. The buildmaster makes all decisions about what, when, and how to build." (<a href="https://docs.buildbot.net/latest/manual/introduction.html#system-architecture">source</a>)</p>
+</dd>
+<dt class="hdlist1">Buildbot Worker</dt>
+<dd>
+<p>"The workers only connect to master and execute whatever commands they are instructed to execute." (<a href="https://docs.buildbot.net/latest/manual/introduction.html#system-architecture">source</a>)</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-28 13:12:24 +0200
+Last updated 2023-05-04 11:02:18 +0200
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// See https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-checks?apiVersion=2022-11-28#about-check-runs
 type CheckRunState string
 
 const CheckRunStateQueued CheckRunState = "queued"
@@ -20,6 +21,25 @@ const CheckRunConclusionCancelled CheckRunConclusion = "cancelled"
 const CheckRunConclusionSkipped CheckRunConclusion = "skipped"
 const CheckRunConclusionTimedOut CheckRunConclusion = "timed_out"
 const CheckRunConclusionActionRequired CheckRunConclusion = "action_required"
+
+// See https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-checks?apiVersion=2022-11-28#about-check-suites
+type CheckSuiteState string
+
+const CheckSuiteStateQueued CheckSuiteState = "queued"
+const CheckSuiteStateInProgress CheckSuiteState = "in_progress"
+const CheckSuiteStateCompleted CheckSuiteState = "completed"
+
+type CheckSuiteConclusion string
+
+const CheckSuiteConclusionActionRequired = "action_required"
+const CheckSuiteConclusionCancelled = "cancelled"
+const CheckSuiteConclusionTimed_out = "timed_out"
+const CheckSuiteConclusionFailure = "failure"
+const CheckSuiteConclusionNeutral = "neutral"
+const CheckSuiteConclusionSkipped = "skipped"
+const CheckSuiteConclusionStale = "stale"
+const CheckSuiteConclusionStartup_failure = "startup_failure"
+const CheckSuiteConclusionSuccess = "success"
 
 // See also https://docs.buildbot.net/latest/developer/results.html#build-result-codes
 func CheckRunStateFromBuildbotResult(resultCode int) CheckRunConclusion {

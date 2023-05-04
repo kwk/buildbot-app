@@ -76,7 +76,7 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 		}
 
 		conclusion := CheckRunStateFromBuildbotResult(buildStatus.Results)
-		if !buildStatus.Properties.GithubCheckRunMandatory {
+		if !buildStatus.Properties.CommandIsMandatory {
 			if conclusion != CheckRunConclusionSuccess {
 				conclusion = CheckRunConclusionNeutral
 			}
@@ -89,7 +89,7 @@ func (srv *AppServer) HandleBuildBotStatusHook() func(http.ResponseWriter, *http
 		}
 
 		title := "Buildbot Status Log"
-		if buildStatus.Properties.GithubCheckRunMandatory {
+		if buildStatus.Properties.CommandIsMandatory {
 			title = fmt.Sprintf("%s (check is optional)", title)
 		}
 		_, _, err = gh.Checks.UpdateCheckRun(req.Context(), buildStatus.Properties.GithubPullRequestRepoOwner[0], buildStatus.Properties.GithubPullRequestRepoName[0], checkRunID, github.UpdateCheckRunOptions{

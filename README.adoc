@@ -1,5 +1,9 @@
-= Your GitHub App that talks to Buildbot
-Konrad Kleine;
+// DO NOT MODIFY THIS DOCUMENT DIRECTLY!
+// MODIFY docs/README.in.adoc INSTEAD!
+// THEN RUN make docs!
+= Your GitHub App that lets you talk to Buildbot
+Konrad Kleine <kkleine@redhat.com>;
+:description: A study to showcase how GitHub pull request comments and Check Runs can be used in combination with aminimally modified buildbot.
 :toc: left
 :toclevels: 5
 :showtitle:
@@ -21,16 +25,18 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
+// We always want our images to be displayed directly from github
 // See https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74#images
-ifdef::env-github[]
+// ifdef::env-github[]
 :imagesdir: https://raw.githubusercontent.com/kwk/buildbot-app/main/
-endif::[]
+// endif::[]
 
 // toc::[]
-Let’s build an app that lets you control your buildbot through
-`/buildbot` comments on Github Pull Requests.
+Let’s build GitHub app that lets you control your buildbot through
+`/buildbot` comments on GitHub Pull Requests.
 
-image:docs/media/logo/logo-round-small.png[logo round small]
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/logo/logo-round-small.png[logo
+round small]
 
 [[_scenarios]]
 == Scenarios
@@ -44,14 +50,81 @@ scenarios we have for this GitHub app.
 In this scenario a user authors a Pull Request comment with the comment
 body being `/buildbot`.
 
-image:docs/media/screenshots/author-buildbot-comment.png[author buildbot
-comment]
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/screenshots/author-buildbot-comment.png[author
+buildbot comment]
 
 The `buildbot-app` gets notified about a new comment and checks if it
 matches a regular expression. In this case the pattern is `^/buildbot$`
 but it could be much more complex and equipped with arguments, depending
 on the semantics we want to establish. For the purpose of this
 demonstration, `/buildbot` is simply enough.
+
+Internally a command comment will be converted into this structure:
+
+*Command structure (../cmd/buildbot-app/command/command.go)*
+
+[source,go]
+----
+// A Command represents all information about a /buildbot command
+type Command struct {
+    // When true, the command has to pass for the PR in order pass gating
+    // (default: true).
+    IsMandatory bool
+    // Case-sensitive, sorted list of builders without duplicates to run build on.
+    // TODO(kwk): Maybe we can default to something reasonable here?
+    BuilderNames []string
+    // The user's GitHub login that issued the /buildbot comment
+    CommentAuthor string
+    // When true, we'll try to run the build even if the PR has already been
+    // tested at this stage (default: false).
+    Force bool
+}
+----
+
+There’s a regular expression that a string comment must match (see
+`StringIsCommand()`) in order for it to be a valid command string:
+
+*Regular Rexpression (cmd/buildbot-app/command/command.go)*
+
+[source,go]
+----
+const (
+    // BuildbotCommand is the command that triggers the buildbot workflow in a
+    // GitHub comment.
+    BuildbotCommand = "/buildbot"
+
+    // CommandOptionMandatory is the boolean option to make a check run
+    // mandatory.
+    CommandOptionMandatory = "mandatory"
+
+    // CommandOptionBuilder is the option that can be used multiple times in a
+    // command comment. The resulting builders will be a case-sensitive, sorted
+    // list of builders with no duplicates.
+    CommandOptionBuilder = "builder"
+
+    // CommandOptionForce is the boolean option to enforce a new build even if
+    // one is already present.
+    CommandOptionForce = "force"
+)
+
+// StringIsCommand returns true if the given string is a valid /buildbot command.
+func StringIsCommand(s string) bool {
+    // force=yes|no : Can be used to allow for PRs to be build even when
+    // they are closed or when a check run for the exact same SHA has been
+    // run already.
+    return regexp.MustCompile(buildRegexPattern()).MatchString(s)
+}
+
+// buildRegexPattern returns the regex pattern to match a string against a
+// /buildbot command
+func buildRegexPattern() string {
+    tfOptions := `(yes|no|true|false|f|t|y|n|0|1)`
+    mandatoryOption := fmt.Sprintf(`%s=%s`, CommandOptionMandatory, tfOptions)
+    forceOption := fmt.Sprintf(`%s=%s`, CommandOptionForce, tfOptions)
+    builderOption := fmt.Sprintf(`%s=(\w+)`, CommandOptionBuilder)
+    return fmt.Sprintf(`^%s(\s+|%s|%s|%s)*$`, BuildbotCommand, mandatoryOption, forceOption, builderOption)
+}
+----
 
 [[_build_log_comment]]
 ==== Build Log Comment
@@ -66,17 +139,40 @@ it and that we are working on it.
 future lookups. That is why we call this comment the
 *build-log-comment*.
 +
-image:docs/media/screenshots/build-log-comment.png[build log comment]
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/build-log-comment.png[build
+log comment]
 +
 Just imagine, your PR gets updated and you want to see the previous
 build results. The _build-log-comment_ is there for you too look it up.
+
+The code for creating the comment is straight-forward:
+
+*Thank You! (cmd/buildbot-app/on_issue_comment_event.go)*
+
+[source,go]
+----
+     // This comment will be used all over the place
+        thankYouComment := fmt.Sprintf(
+            `Thank you @%s for using the <a href="todo:link-to-documentation-here"><code>%s</code></a> command <a href="%s">here</a>! `,
+            command.BuildbotCommand,
+            *event.Comment.User.Login,
+            *event.Comment.HTMLURL,
+        )
+
+        newComment, _, err := gh.Issues.CreateComment(context.Background(), repoOwner, repoName, prNumber, &github.IssueComment{
+            Body: github.String(thankYouComment +
+                `<sub>This very comment will be used to continously log build state changes for your request. We decided to do this in addition to using Github's Check Runs below so you can inspect previous check runs better.</sub>`,
+            ),
+        })
+----
 
 [[_check_run]]
 ==== Check run
 
 Of course, we are also using GitHub’s check runs as you can see here:
 
-image:docs/media/screenshots/check-run-overview.png[check run overview]
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/check-run-overview.png[check
+run overview]
 
 [NOTE]
 ====
@@ -87,7 +183,8 @@ give them good names.
 When you click on *Details* next to a check run, you’re brought to this
 page on GitHub:
 
-image:docs/media/screenshots/check-run-details.png[check run details]
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/check-run-details.png[check
+run details]
 
 [[_video_walkthrough]]
 ==== Video walkthrough
@@ -102,7 +199,95 @@ https://www.youtube.com/watch?v=9NpbKEmkvt8
 The sequence diagram for this scenario is layed out here. It includes
 some of the internals of the processing.
 
-image:docs/media/on-buildbot-comment.svg[on buildbot comment]
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/on-buildbot-comment.svg[on
+buildbot comment]
+
+[[_testing]]
+=== Testing
+
+[[_testing_github_interaction]]
+==== Testing GitHub interaction
+
+We’re using a fantastic library to run to simulate sequential GitHub
+interaction: https://github.com/migueleliasweb/go-github-mock.
+
+For example, when `/buildbot` comment is authored on a pull request we
+don’t want a build to run if the pull request is not mergable. Therefore
+we first have to take the event input and get the pull request from
+GitHub before we check if is mergable:
+
+*Get PR and check mergability
+(cmd/buildbot-app/on_issue_comment_event.go)*
+
+[source,go]
+----
+     commentUser := *event.Comment.User.Login
+        repoOwner := *event.Repo.Owner.Login
+        repoName := *event.Repo.Name
+        prNumber := *event.Issue.Number
+        pr, _, err := gh.PullRequests.Get(context.Background(), repoOwner, repoName, prNumber)
+        if !pr.GetMergeable() {
+        }
+----
+
+In order to test that a PR is not mergable, we can simply create a valid
+`github.PullRequest` object (see `prOK()`) and set the `Mergable` member
+to `false`. The mock server will return it as the first request and
+afterwards create a `POST` a comment about the pull request not being
+mergable:
+
+*Test: Get PR and check mergability
+(cmd/buildbot-app/on_issue_comment_event_test.go)*
+
+[source,go]
+----
+func TestOnIssueCommentEventAny(t *testing.T) {
+    t.Run("pr not mergable", func(t *testing.T) {
+        t.Run("comment writable", func(t *testing.T) {
+            prNotMergable := prOK()
+            prNotMergable.Mergeable = github.Bool(false)
+            srv := NewMockServer(
+                // Get PR for comment event
+                mock.WithRequestMatch(
+                    mock.GetReposPullsByOwnerByRepoByPullNumber,
+                    prNotMergable,
+                ),
+                // Create comment on about PR not being mergable
+                mock.WithRequestMatch(
+                    mock.PostReposIssuesCommentsByOwnerByRepoByIssueNumber,
+                    github.IssueComment{
+                        Body: github.String("blabla"),
+                    },
+                ),
+            )
+            fn := OnIssueCommentEventAny(srv)
+            err := fn("1234", "created", issueCommentEventOK())
+            require.ErrorContains(t, err, "pr is not mergable", "expected and error because pr is not mergable, yet")
+        })
+    })
+}
+----
+
+For this trick to work we have to use dependency injection by passing a
+Go interface (`Server`) instead of a real server object to functions in
+various places:
+
+*Server interface (cmd/buildbot-app/server.go)*
+
+[source,go]
+----
+// Server specifies the interface that we need to implement from the AppServer
+// object in order to provide a decent mock in tests.
+type Server interface {
+
+    // NewGithubClient returns a new GitHub client object for the given
+    // application ID.
+    NewGithubClient(appInstallationID int64) (*github.Client, error)
+
+    // RunTryBot runs a "buildbot try" command
+    RunTryBot(responsibleGithubLogin string, githubRepoOwner string, githubRepoName string, properties ...string) (string, error)
+}
+----
 
 [[_todos]]
 ==== TODOs
@@ -120,6 +305,7 @@ containers.
 ----
 $ git clone https://github.com/kwk/buildbot-app.git && cd buildbot-app 
 $ sudo dnf install -y direnv golang podman podman-compose buildbot pandic asciidoctor 
+$ gem install asciidoctor-lists 
 $ go install github.com/cespare/reflex@latest 
 $ cat <<EOF >> ~/.bashrc 
 export PATH=\${PATH}:~/go/bin
@@ -135,6 +321,7 @@ $ make app
 * Install tools we need/use for development locally. If this was a
 deployment site the only requirement is buildbot so that the github app
 can make a call to `buildbot try`.
+* Install extension to create list of figures etc.
 * Install hot-reload tool.
 * Make tools above available upon next source of `.bashrc`.
 * Reload `.bashrc` to have `direnv` and `reflex` working in your current
@@ -150,20 +337,20 @@ three workers.
 == Useful links
 
 [[_llvm_links]]
-=== LLVM links
+== LLVM links
 
 * Discussion on LLVM Discourse:
 https://discourse.llvm.org/t/rfc-prototyping-pre-commit-testing-using-buildbot/69900?u=kwk
 
 [[_github_app_documents]]
-=== Github App documents
+== Github App documents
 
 * Github Webhook Events and Payloads:
 https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads
 * Github Apps documentation: https://docs.github.com/en/apps
 
 [[_interacting_with_github]]
-=== Interacting with Github
+== Interacting with Github
 
 * Forwarding Github Webhooks to your local dev machine:
 https://dashboard.ngrok.com/get-started/setup
@@ -171,7 +358,7 @@ https://dashboard.ngrok.com/get-started/setup
 https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
 
 [[_golang_libraries]]
-=== Golang libraries
+== Golang libraries
 
 * For using Github API v3 from Golang:
 https://github.com/google/go-github
@@ -193,11 +380,36 @@ https://docs.buildbot.net/latest/manual/introduction.html#system-architecture
 https://docs.buildbot.net/latest/manual/configuration/services/index.html
 
 [[_misc_links]]
-=== Misc links
+== Misc links
 
 * Recording terminal sessions: https://github.com/faressoft/terminalizer
 * For automatic reloading: https://github.com/cespare/reflex
 * Per-Directory environment files: https://direnv.net/
+
+[[_lists]]
+== Lists
+
+[[_list_of_figures]]
+== List of figures
+
+[[_list_of_tables]]
+== List of tables
+
+[[_list_of_code_snippets]]
+== List of code snippets
+
+link:#e49f1284-0201-4910-96f7-537d63e9efa7[Listing 1. ]Command structure
+(../cmd/buildbot-app/command/command.go) +
+link:#44bdb08c-ed51-4250-b36a-8fc57e17ba7e[Listing 2. ]Regular
+Rexpression (cmd/buildbot-app/command/command.go) +
+link:#1c944a1f-d0db-4fcd-b4a8-c02b221041ae[Listing 3. ]Thank You!
+(cmd/buildbot-app/on_issue_comment_event.go) +
+link:#f4bb7891-74cb-4d36-9c6b-42694faeb4cb[Listing 4. ]Get PR and check
+mergability (cmd/buildbot-app/on_issue_comment_event.go) +
+link:#784cca45-2ec1-4cf2-8582-8b5353edb270[Listing 5. ]Test: Get PR and
+check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
+link:#5751c1e2-acf3-432a-88ec-8d1d5a2fc562[Listing 6. ]Server interface
+(cmd/buildbot-app/server.go) +
 
 [[_todo]]
 == TODO
@@ -206,3 +418,23 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 `.envrc` file
 * ❏ hook into buildbots event system and send feedback to buildbot app
 from there?
+
+[[_terminology]]
+== Terminology
+
+PR or Pull Request::
+  "Pull requests let you tell others about changes you’ve pushed to a
+  branch in a repository on GitHub. Once a pull request is opened, you
+  can discuss and review the potential changes with collaborators and
+  add follow-up commits before your changes are merged into the base
+  branch."
+  (https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests[source])
+Buildmaster or Buildbot Master::
+  "Buildbot consists of a single buildmaster and one or more workers
+  that connect to the master. The buildmaster makes all decisions about
+  what, when, and how to build."
+  (https://docs.buildbot.net/latest/manual/introduction.html#system-architecture[source])
+Buildbot Worker::
+  "The workers only connect to master and execute whatever commands they
+  are instructed to execute."
+  (https://docs.buildbot.net/latest/manual/introduction.html#system-architecture[source])
