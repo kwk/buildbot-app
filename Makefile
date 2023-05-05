@@ -27,4 +27,4 @@ forwarder:
 .PHONY: docs
 ## Prepares the webiste and the github readme as well as any diagrams
 docs:
-	$(MAKE) -C docs
+	$(MAKE) -C docs docs

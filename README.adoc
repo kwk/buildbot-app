@@ -38,6 +38,8 @@ Let’s build GitHub app that lets you control your buildbot through
 image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/logo/logo-round-small.png[logo
 round small]
 
+image:https://codecov.io/gh/kwk/buildbot-app/branch/main/graph/badge.svg?token=ZQ83LL4XLY[badge]
+
 [[_scenarios]]
 == Scenarios
 
@@ -398,17 +400,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#e49f1284-0201-4910-96f7-537d63e9efa7[Listing 1. ]Command structure
+link:#c79f9327-5242-4a14-a1a2-e46df93dc991[Listing 1. ]Command structure
 (../cmd/buildbot-app/command/command.go) +
-link:#44bdb08c-ed51-4250-b36a-8fc57e17ba7e[Listing 2. ]Regular
+link:#aa7d8bf2-074b-4b6f-b5fd-28045c52f183[Listing 2. ]Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#1c944a1f-d0db-4fcd-b4a8-c02b221041ae[Listing 3. ]Thank You!
+link:#a868db98-b83e-4c4e-859c-9347b84ae0e6[Listing 3. ]Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#f4bb7891-74cb-4d36-9c6b-42694faeb4cb[Listing 4. ]Get PR and check
+link:#c03dab76-8d50-4245-b885-f5a22a1fbf59[Listing 4. ]Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#784cca45-2ec1-4cf2-8582-8b5353edb270[Listing 5. ]Test: Get PR and
+link:#6f2fdb34-221b-4844-a5ca-5e1a2821126b[Listing 5. ]Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#5751c1e2-acf3-432a-88ec-8d1d5a2fc562[Listing 6. ]Server interface
+link:#9670eccf-fd42-40aa-8986-2d0cbd64e1ce[Listing 6. ]Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]
@@ -428,13 +430,39 @@ PR or Pull Request::
   can discuss and review the potential changes with collaborators and
   add follow-up commits before your changes are merged into the base
   branch."
-  (https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests[source])
+   — (https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests[About
+  pull requests])
 Buildmaster or Buildbot Master::
   "Buildbot consists of a single buildmaster and one or more workers
   that connect to the master. The buildmaster makes all decisions about
-  what, when, and how to build."
-  (https://docs.buildbot.net/latest/manual/introduction.html#system-architecture[source])
+  what, when, and how to
+  build." — (https://docs.buildbot.net/latest/manual/introduction.html[Buildbot
+  System Architecture])
 Buildbot Worker::
   "The workers only connect to master and execute whatever commands they
-  are instructed to execute."
-  (https://docs.buildbot.net/latest/manual/introduction.html#system-architecture[source])
+  are instructed to
+  execute." — (https://docs.buildbot.net/latest/manual/introduction.html[Buildbot
+  System Architecture])
+Builder::
+  "A builder is a user-configurable description of how to perform a
+  build. It defines what steps a new build will have, what workers it
+  may run on and a couple of other properties. A builder takes a build
+  request which specifies the intention to create a build for specific
+  versions of code and produces a build which is a concrete description
+  of a build including a list of steps to perform, the worker this needs
+  to be performed on and so
+  on." — (https://docs.buildbot.net/latest/manual/introduction.html[Buildbot
+  System Architecture])
+Scheduler::
+  "A scheduler is a user-configurable component that decides when to
+  start a build. The decision could be based on time, on new code being
+  committed or on similar
+  events." — (https://docs.buildbot.net/latest/manual/introduction.html[Buildbot
+  System Architecture])
+Reporters::
+  Reporters are user-configurable components that send information about
+  started or completed builds to external sources. Buildbot provides its
+  own web application to observe this data, so reporters are optional.
+  However they can be used to provide up to date build status on
+  platforms such as GitHub or sending
+  emails. — (https://docs.buildbot.net/latest/manual/introduction.html[Introduction])

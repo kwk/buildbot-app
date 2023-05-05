@@ -3,6 +3,9 @@ SHELL := /bin/bash
 
 include ../help.mk
 
+.PHONY: all
+all: docs
+
 .PHONY: media
 media:
 	ln -sf ~/bin/plantuml.jar .

@@ -8,7 +8,7 @@ package buildbot_http_status_push
 // Buildbot:
 // https://docs.buildbot.net/latest/manual/configuration/reporters/http_status.html
 
-// TODO(kwk): This can change per request to, so implement our own parsing logic
+// TODO(kwk): This can change per request, so implement our own parsing logic
 // that can handle missing properties.
 type Properties struct {
 	GithubPullRequestNumber    []string `json:"github_pull_request_number,omitempty"`
