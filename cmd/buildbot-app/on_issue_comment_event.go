@@ -110,25 +110,27 @@ func OnIssueCommentEventAny(srv Server) githubevents.IssueCommentEventHandleFunc
 		}
 		currentCheckRunName := cmd.ToGithubCheckNameString()
 		for _, checkRun := range checkRuns {
-			if *checkRun.Name == currentCheckRunName {
-				// The requested check has already been run for the given PR. Let's see if a build is forced this time.
-				if !cmd.Force {
-					msg := fmt.Sprintf(thankYouComment+`
-The same build request exists for this pull request's SHA (%s) <a href="%s">here</a>.
-Consider specifying the <code>%s=true</code> option to enforce a new build.
-					`, *pr.Head.SHA, *checkRun.HTMLURL, command.CommandOptionForce)
-					_, _, err := gh.Issues.CreateComment(context.Background(), repoOwner, repoName, prNumber, &github.IssueComment{
-						Body: github.String(msg),
-					})
-					if err != nil {
-						return fmt.Errorf("failed to create comment: %w", err)
-					}
-					// We return here because the force option was false
-					return nil
-				}
+			if *checkRun.Name != currentCheckRunName {
+				continue
+			}
+			// The requested check has already been run for the given PR. Let's see if a build is forced this time.
+			if cmd.Force {
 				// Break because we will continue with the build as planned
 				break
 			}
+
+			msg := fmt.Sprintf(thankYouComment+`
+The same build request exists for this pull request's SHA (%s) <a href="%s">here</a>.
+Consider specifying the <code>%s=true</code> option to enforce a new build.
+			`, *pr.Head.SHA, *checkRun.HTMLURL, command.CommandOptionForce)
+			_, _, err := gh.Issues.CreateComment(context.Background(), repoOwner, repoName, prNumber, &github.IssueComment{
+				Body: github.String(msg),
+			})
+			if err != nil {
+				return fmt.Errorf("failed to create comment: %w", err)
+			}
+			// We return here because the force option was false
+			return nil
 		}
 
 		// ----
