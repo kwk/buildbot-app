@@ -8,7 +8,7 @@ jobs:
     - name: Setup Go environment
       uses: actions/setup-go@v4.0.0
       with:
-        go-version: '1.18'
+        go-version: '1.19'
         # Used to specify whether caching is needed. Set to true, if you'd like to enable caching.
         cache: true
         # Used to specify the path to a dependency file - go.sum
