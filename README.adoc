@@ -39,6 +39,7 @@ image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/logo/lo
 round small]
 
 image:https://codecov.io/gh/kwk/buildbot-app/branch/main/graph/badge.svg?token=ZQ83LL4XLY[CodeCov]
+
 image:https://dl.circleci.com/status-badge/img/gh/kwk/buildbot-app/tree/main.svg?style=svg[CircleCI]
 
 [[_scenarios]]
@@ -142,7 +143,7 @@ it and that we are working on it.
 future lookups. That is why we call this comment the
 *build-log-comment*.
 +
-image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/build-log-comment.png[build
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/screenshots/build-log-comment.png[build
 log comment]
 +
 Just imagine, your PR gets updated and you want to see the previous
@@ -174,7 +175,7 @@ The code for creating the comment is straight-forward:
 
 Of course, we are also using GitHub’s check runs as you can see here:
 
-image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/check-run-overview.png[check
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/screenshots/check-run-overview.png[check
 run overview]
 
 [NOTE]
@@ -186,7 +187,7 @@ give them good names.
 When you click on *Details* next to a check run, you’re brought to this
 page on GitHub:
 
-image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/screenshots/check-run-details.png[check
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/screenshots/check-run-details.png[check
 run details]
 
 [[_video_walkthrough]]
@@ -202,7 +203,7 @@ https://www.youtube.com/watch?v=9NpbKEmkvt8
 The sequence diagram for this scenario is layed out here. It includes
 some of the internals of the processing.
 
-image:https://raw.githubusercontent.com/kwk/buildbot-app/main/media/on-buildbot-comment.svg[on
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/on-buildbot-comment.svg[on
 buildbot comment]
 
 [[_testing]]
@@ -401,17 +402,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#51f7364e-64fa-45a6-8852-94857272dbc2[Listing 1. ]Command structure
+link:#ffc56d89-4183-4959-a53e-c4cabc294945[Listing 1. ]Command structure
 (cmd/buildbot-app/command/command.go) +
-link:#2e113f8e-5af4-4eaa-bd90-4af1386fd42a[Listing 2. ]Regular
+link:#8ac7d544-94b0-41c6-b004-b014dca55878[Listing 2. ]Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#3e9179a7-91eb-4f16-9d19-eb6168ab97bc[Listing 3. ]Thank You!
+link:#6014b57a-c602-4556-b641-3c055fab89ab[Listing 3. ]Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#efeecb79-8bc9-4466-84e4-104e0447bc15[Listing 4. ]Get PR and check
+link:#3c166491-783d-4f83-b2d9-06cefbc3eeeb[Listing 4. ]Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#f374b417-b2f0-4d27-8fca-b682457970f9[Listing 5. ]Test: Get PR and
+link:#55d47264-0eda-4b8d-9f12-3ceb3316a086[Listing 5. ]Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#dc40d61d-efda-4dcd-85f3-44d8406da190[Listing 6. ]Server interface
+link:#09712772-87bf-4d1b-a454-c411c9ee53da[Listing 6. ]Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]
