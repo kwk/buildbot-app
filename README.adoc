@@ -32,7 +32,7 @@ endif::[]
 // endif::[]
 
 // toc::[]
-Let’s build GitHub app that lets you control your buildbot through
+Let’s build a GitHub App that lets you control your buildbot through
 `/buildbot` comments on GitHub Pull Requests.
 
 image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/logo/logo-round-small.png[logo
@@ -400,17 +400,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#c79f9327-5242-4a14-a1a2-e46df93dc991[Listing 1. ]Command structure
+link:#0995653e-094e-4c2f-80e2-0fb04776718e[Listing 1. ]Command structure
 (../cmd/buildbot-app/command/command.go) +
-link:#aa7d8bf2-074b-4b6f-b5fd-28045c52f183[Listing 2. ]Regular
+link:#7f23b34d-b2a7-410e-84e5-e0c7d4cac4b2[Listing 2. ]Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#a868db98-b83e-4c4e-859c-9347b84ae0e6[Listing 3. ]Thank You!
+link:#ff546918-c124-4027-80f4-2f7f004a5e2d[Listing 3. ]Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#c03dab76-8d50-4245-b885-f5a22a1fbf59[Listing 4. ]Get PR and check
+link:#7e20ddaf-a6d1-4644-9334-9e88612e01a6[Listing 4. ]Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#6f2fdb34-221b-4844-a5ca-5e1a2821126b[Listing 5. ]Test: Get PR and
+link:#28dfa0fd-f6c8-402d-a1c5-3ee210e0a9f8[Listing 5. ]Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#9670eccf-fd42-40aa-8986-2d0cbd64e1ce[Listing 6. ]Server interface
+link:#71d672ba-5e8f-49b5-808f-5ae85756cdbe[Listing 6. ]Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]

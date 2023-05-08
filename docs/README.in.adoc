@@ -2,7 +2,7 @@
 include::preamble.adoc[]
 
 [.lead]
-Let's build GitHub app that lets you control your buildbot through `/buildbot` comments on GitHub Pull Requests.
+Let's build a GitHub App that lets you control your buildbot through `/buildbot` comments on GitHub Pull Requests.
 
 image::docs/media/logo/logo-round-small.png[]
 
