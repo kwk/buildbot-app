@@ -38,7 +38,8 @@ Let’s build a GitHub App that lets you control your buildbot through
 image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/logo/logo-round-small.png[logo
 round small]
 
-image:https://codecov.io/gh/kwk/buildbot-app/branch/main/graph/badge.svg?token=ZQ83LL4XLY[badge]
+image:https://codecov.io/gh/kwk/buildbot-app/branch/main/graph/badge.svg?token=ZQ83LL4XLY[CodeCov]
+image:https://dl.circleci.com/status-badge/img/gh/kwk/buildbot-app/tree/main.svg?style=svg[CircleCI]
 
 [[_scenarios]]
 == Scenarios
@@ -400,17 +401,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#276816c9-3bac-4abf-9801-ab36f772c84a[Listing 1. ]Command structure
+link:#51f7364e-64fa-45a6-8852-94857272dbc2[Listing 1. ]Command structure
 (cmd/buildbot-app/command/command.go) +
-link:#d63bb47f-0905-4f35-8e76-cf37be6c9150[Listing 2. ]Regular
+link:#2e113f8e-5af4-4eaa-bd90-4af1386fd42a[Listing 2. ]Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#ecc39446-536f-431f-a955-acb0a5859c42[Listing 3. ]Thank You!
+link:#3e9179a7-91eb-4f16-9d19-eb6168ab97bc[Listing 3. ]Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#eedc4b10-78cf-4e96-96e6-fd863d35d4e2[Listing 4. ]Get PR and check
+link:#efeecb79-8bc9-4466-84e4-104e0447bc15[Listing 4. ]Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#9cf7a407-03d0-4665-adc0-5647342d510a[Listing 5. ]Test: Get PR and
+link:#f374b417-b2f0-4d27-8fca-b682457970f9[Listing 5. ]Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#845b4266-68cc-4e3a-8526-6b0bc0b1c3e3[Listing 6. ]Server interface
+link:#dc40d61d-efda-4dcd-85f3-44d8406da190[Listing 6. ]Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]
