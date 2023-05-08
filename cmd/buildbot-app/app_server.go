@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strconv"
 
-	"github.com/bradleyfalzon/ghinstallation/v2"
+	ghinstallation "github.com/bradleyfalzon/ghinstallation/v2"
 	"github.com/cbrgm/githubevents/githubevents"
 	"github.com/google/go-github/v50/github"
 )
