@@ -6,7 +6,8 @@ Let's build a GitHub App that lets you control your buildbot through `/buildbot`
 
 image::docs/media/logo/logo-round-small.png[]
 
-image::https://codecov.io/gh/kwk/buildbot-app/branch/main/graph/badge.svg?token=ZQ83LL4XLY[link="https://codecov.io/gh/kwk/buildbot-app"]
+image:https://codecov.io/gh/kwk/buildbot-app/branch/main/graph/badge.svg?token=ZQ83LL4XLY["CodeCov", link="https://codecov.io/gh/kwk/buildbot-app"]
+image:https://dl.circleci.com/status-badge/img/gh/kwk/buildbot-app/tree/main.svg?style=svg["CircleCI", link="https://dl.circleci.com/status-badge/redirect/gh/kwk/buildbot-app/tree/main"]
 
 // == Overview
 
