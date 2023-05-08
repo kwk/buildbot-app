@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -73,7 +72,7 @@ func (srv *AppServer) NewGithubClient(appInstallationID int64) (*github.Client, 
 func (srv *AppServer) RunTryBot(responsibleGithubLogin string, githubRepoOwner string, githubRepoName string, properties ...string) (string, error) {
 	// In order to be able to run "buildbot try" from outside a git repository
 	// we have to pass in an empty dummy diff file.
-	dummyDiffFile, err := ioutil.TempFile("/tmp", "dummy.*.diff")
+	dummyDiffFile, err := os.CreateTemp("/tmp", "dummy.*.diff")
 	if err != nil {
 		log.Fatal(err)
 	}

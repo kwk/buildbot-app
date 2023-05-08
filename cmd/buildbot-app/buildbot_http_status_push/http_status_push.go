@@ -8,6 +8,8 @@ package buildbot_http_status_push
 // Buildbot:
 // https://docs.buildbot.net/latest/manual/configuration/reporters/http_status.html
 
+type any interface{}
+
 // TODO(kwk): This can change per request, so implement our own parsing logic
 // that can handle missing properties.
 type Properties struct {
