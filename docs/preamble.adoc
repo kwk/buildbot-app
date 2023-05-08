@@ -1,4 +1,4 @@
-= Your GitHub App that lets you talk to Buildbot
+= Your GitHub App to make Buildbot a part of your Pull Request workflow.
 Konrad Kleine <kkleine@redhat.com>;
 :description: A study to showcase how GitHub pull request comments and Check Runs can be used in combination with aminimally modified buildbot.
 :toc: left

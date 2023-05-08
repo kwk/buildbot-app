@@ -27,7 +27,7 @@ The `buildbot-app` gets notified about a new comment and checks if it matches a 
 
 Internally a command comment will be converted into this structure:
 
-.Command structure (../cmd/buildbot-app/command/command.go)
+.Command structure (cmd/buildbot-app/command/command.go)
 [source,go,linenums]
 ----
 include::../cmd/buildbot-app/command/command.go[tags=command]

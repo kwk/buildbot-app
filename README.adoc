@@ -1,7 +1,7 @@
 // DO NOT MODIFY THIS DOCUMENT DIRECTLY!
 // MODIFY docs/README.in.adoc INSTEAD!
 // THEN RUN make docs!
-= Your GitHub App that lets you talk to Buildbot
+= Your GitHub App to make Buildbot a part of your Pull Request workflow.
 Konrad Kleine <kkleine@redhat.com>;
 :description: A study to showcase how GitHub pull request comments and Check Runs can be used in combination with aminimally modified buildbot.
 :toc: left
@@ -63,7 +63,7 @@ demonstration, `/buildbot` is simply enough.
 
 Internally a command comment will be converted into this structure:
 
-*Command structure (../cmd/buildbot-app/command/command.go)*
+*Command structure (cmd/buildbot-app/command/command.go)*
 
 [source,go]
 ----
@@ -400,17 +400,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#0995653e-094e-4c2f-80e2-0fb04776718e[Listing 1. ]Command structure
-(../cmd/buildbot-app/command/command.go) +
-link:#7f23b34d-b2a7-410e-84e5-e0c7d4cac4b2[Listing 2. ]Regular
+link:#276816c9-3bac-4abf-9801-ab36f772c84a[Listing 1. ]Command structure
+(cmd/buildbot-app/command/command.go) +
+link:#d63bb47f-0905-4f35-8e76-cf37be6c9150[Listing 2. ]Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#ff546918-c124-4027-80f4-2f7f004a5e2d[Listing 3. ]Thank You!
+link:#ecc39446-536f-431f-a955-acb0a5859c42[Listing 3. ]Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#7e20ddaf-a6d1-4644-9334-9e88612e01a6[Listing 4. ]Get PR and check
+link:#eedc4b10-78cf-4e96-96e6-fd863d35d4e2[Listing 4. ]Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#28dfa0fd-f6c8-402d-a1c5-3ee210e0a9f8[Listing 5. ]Test: Get PR and
+link:#9cf7a407-03d0-4665-adc0-5647342d510a[Listing 5. ]Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#71d672ba-5e8f-49b5-808f-5ae85756cdbe[Listing 6. ]Server interface
+link:#845b4266-68cc-4e3a-8526-6b0bc0b1c3e3[Listing 6. ]Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]
