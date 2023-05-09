@@ -24,7 +24,11 @@ In this scenario a user authors a Pull Request comment with the comment body bei
 [.screenshot]
 image::docs/media/screenshots/author-buildbot-comment.png[]
 
-The `buildbot-app` gets notified about a new comment and checks if it matches a regular expression. In this case the pattern is `^/buildbot$` but it could be much more complex and equipped with arguments, depending on the semantics we want to establish. For the purpose of this demonstration, `/buildbot` is simply enough.
+The `buildbot-app` gets notified about a new comment and checks if it matches a regular expression. This EBNF diagram shows the current command syntax:
+
+image::docs/media/command-ebnf.svg[]
+
+For the purpose of this demonstration, `/buildbot` is simply enough.
 
 Internally a command comment will be converted into this structure:
 

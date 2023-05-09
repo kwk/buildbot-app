@@ -58,10 +58,13 @@ image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/screens
 buildbot comment]
 
 The `buildbot-app` gets notified about a new comment and checks if it
-matches a regular expression. In this case the pattern is `^/buildbot$`
-but it could be much more complex and equipped with arguments, depending
-on the semantics we want to establish. For the purpose of this
-demonstration, `/buildbot` is simply enough.
+matches a regular expression. This EBNF diagram shows the current
+command syntax:
+
+image:https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/command-ebnf.svg[command
+ebnf]
+
+For the purpose of this demonstration, `/buildbot` is simply enough.
 
 Internally a command comment will be converted into this structure:
 
@@ -402,17 +405,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#ffc56d89-4183-4959-a53e-c4cabc294945[Listing 1. ]Command structure
+link:#5cb629ee-43a2-46e5-a87a-b9ec85353ef1[Listing 1. ]Command structure
 (cmd/buildbot-app/command/command.go) +
-link:#8ac7d544-94b0-41c6-b004-b014dca55878[Listing 2. ]Regular
+link:#ad332974-235e-4d79-83b4-39fb4ce307c8[Listing 2. ]Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#6014b57a-c602-4556-b641-3c055fab89ab[Listing 3. ]Thank You!
+link:#5c7e7c3d-a7a1-4a3c-a029-c62f07e486ad[Listing 3. ]Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#3c166491-783d-4f83-b2d9-06cefbc3eeeb[Listing 4. ]Get PR and check
+link:#60e9f0e7-8474-4802-8a07-4a7ef1585327[Listing 4. ]Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#55d47264-0eda-4b8d-9f12-3ceb3316a086[Listing 5. ]Test: Get PR and
+link:#ca2f0a2f-7c1a-42cd-8964-ff0a4bb5a7a7[Listing 5. ]Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#09712772-87bf-4d1b-a454-c411c9ee53da[Listing 6. ]Server interface
+link:#40fcfc54-064a-49d0-96bc-c8328034c8ec[Listing 6. ]Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]

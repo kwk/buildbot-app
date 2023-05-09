@@ -1,0 +1,17 @@
+@startuml
+
+@startebnf
+title Buildbot Command in Pull Request Comment
+command = "/buildbot", {option(*optional*)}-;
+option =
+        "mandatory", "=" , boolean 
+        | "force", "=", boolean 
+        | "builder", "=", buildername (* \w+ *)
+    ;
+boolean = (
+      true(* true, t, yes, y, 1 *)
+    | false (* false, f, no, n, 0 *)
+);
+@endebnf
+
+@enduml

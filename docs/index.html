@@ -606,12 +606,20 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>buildbot-app</code> gets notified about a new comment and checks if it matches a regular expression. In this case the pattern is <code>^/buildbot$</code> but it could be much more complex and equipped with arguments, depending on the semantics we want to establish. For the purpose of this demonstration, <code>/buildbot</code> is simply enough.</p>
+<p>The <code>buildbot-app</code> gets notified about a new comment and checks if it matches a regular expression. This EBNF diagram shows the current command syntax:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://raw.githubusercontent.com/kwk/buildbot-app/main/docs/media/command-ebnf.svg" alt="command ebnf">
+</div>
+</div>
+<div class="paragraph">
+<p>For the purpose of this demonstration, <code>/buildbot</code> is simply enough.</p>
 </div>
 <div class="paragraph">
 <p>Internally a command comment will be converted into this structure:</p>
 </div>
-<div id="72998dfb-22a4-4f55-a508-f2576eefe592" class="listingblock">
+<div id="4648b6e2-16dc-4512-b1c4-499530012d3f" class="listingblock">
 <div class="title">Listing 1. Command structure (cmd/buildbot-app/command/command.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -647,7 +655,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>There&#8217;s a regular expression that a string comment must match (see <code>StringIsCommand()</code>) in order for it to be a valid command string:</p>
 </div>
-<div id="2f3e003a-645a-4152-bc61-f348c4f9ad0f" class="listingblock">
+<div id="18e3b321-ebdc-4956-b52d-cf49d575e08c" class="listingblock">
 <div class="title">Listing 2. Regular Rexpression (cmd/buildbot-app/command/command.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -750,7 +758,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>The code for creating the comment is straight-forward:</p>
 </div>
-<div id="2637c6e3-cbf8-453f-a507-827c05499596" class="listingblock">
+<div id="ce78eb3a-ca46-4b3d-bc99-bff5252b33c9" class="listingblock">
 <div class="title">Listing 3. Thank You! (cmd/buildbot-app/on_issue_comment_event.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -848,7 +856,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>For example, when <code>/buildbot</code> comment is authored on a pull request we don&#8217;t want a build to run if the pull request is not mergable. Therefore we first have to take the event input and get the pull request from GitHub before we check if is mergable:</p>
 </div>
-<div id="0509d24e-45e8-4271-b03c-0d18ca6e5520" class="listingblock">
+<div id="f455402b-7b70-48ba-b78f-1c1ea1739cf6" class="listingblock">
 <div class="title">Listing 4. Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -870,7 +878,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>In order to test that a PR is not mergable, we can simply create a valid <code>github.PullRequest</code>  object (see <code>prOK()</code>) and set the <code>Mergable</code> member to <code>false</code>. The mock server will return it as the first request and afterwards create a <code>POST</code> a comment about the pull request not being mergable:</p>
 </div>
-<div id="2f114d47-8522-4804-a48f-6a9853208c13" class="listingblock">
+<div id="ffb64a37-e308-4d3e-9666-109187b71d89" class="listingblock">
 <div class="title">Listing 5. Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -928,7 +936,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>For this trick to work we have to use dependency injection by passing a Go interface (<code>Server</code>) instead of a real server object to functions in various places:</p>
 </div>
-<div id="61793c26-1233-4600-b461-cc90a1c648d1" class="listingblock">
+<div id="d255bbba-4e24-4979-b7a0-797dd276bdc9" class="listingblock">
 <div class="title">Listing 6. Server interface (cmd/buildbot-app/server.go)</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1138,12 +1146,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="sect2">
 <h3 id="_list_of_code_snippets"><a class="anchor" href="#_list_of_code_snippets"></a><a class="link" href="#_list_of_code_snippets">B.3. List of code snippets</a></h3>
 <div class="paragraph">
-<p><a href="#72998dfb-22a4-4f55-a508-f2576eefe592">Listing 1. </a>Command structure (cmd/buildbot-app/command/command.go)<br>
-<a href="#2f3e003a-645a-4152-bc61-f348c4f9ad0f">Listing 2. </a>Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
-<a href="#2637c6e3-cbf8-453f-a507-827c05499596">Listing 3. </a>Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
-<a href="#0509d24e-45e8-4271-b03c-0d18ca6e5520">Listing 4. </a>Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
-<a href="#2f114d47-8522-4804-a48f-6a9853208c13">Listing 5. </a>Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
-<a href="#61793c26-1233-4600-b461-cc90a1c648d1">Listing 6. </a>Server interface (cmd/buildbot-app/server.go)<br></p>
+<p><a href="#4648b6e2-16dc-4512-b1c4-499530012d3f">Listing 1. </a>Command structure (cmd/buildbot-app/command/command.go)<br>
+<a href="#18e3b321-ebdc-4956-b52d-cf49d575e08c">Listing 2. </a>Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
+<a href="#ce78eb3a-ca46-4b3d-bc99-bff5252b33c9">Listing 3. </a>Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#f455402b-7b70-48ba-b78f-1c1ea1739cf6">Listing 4. </a>Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#ffb64a37-e308-4d3e-9666-109187b71d89">Listing 5. </a>Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
+<a href="#d255bbba-4e24-4979-b7a0-797dd276bdc9">Listing 6. </a>Server interface (cmd/buildbot-app/server.go)<br></p>
 </div>
 </div>
 </div>
@@ -1200,7 +1208,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-05-08 14:54:22 +0200
+Last updated 2023-05-09 22:25:09 +0200
 </div>
 </div>
 <script type="text/x-mathjax-config">
