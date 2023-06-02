@@ -38,7 +38,7 @@ charset-normalizer==3.1.0
     # via requests
 constantly==15.1.0
     # via twisted
-cryptography==40.0.1
+cryptography==41.0.0
     # via autobahn
 future==0.18.3
     # via buildbot-worker
