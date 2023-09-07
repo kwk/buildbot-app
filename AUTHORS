@@ -1,0 +1,25 @@
+# This is the list of buildbot-app authors for copyright purposes.
+#
+# This does not necessarily list everyone who has contributed code.
+# To see the full list of contributors, see the revision history in source
+# control.
+
+# Names should be added to this file with this pattern:
+#
+# For individuals:
+#   Name <email address>
+#
+# For organizations:
+#   Organization <fnmatch pattern>
+#
+# See python fnmatch module documentation for more information.
+#
+# Please keep the list sorted.
+#
+
+# BEGIN individuals section.
+Christian Schmidt <ChrisSchmi@users.noreply.github.com>
+Konrad Kleine <kkleine@redhat.com>
+# Please DO NOT APPEND here. See comments at the top of the file.
+# END individuals section.
+
