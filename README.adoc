@@ -32,7 +32,7 @@ endif::[]
 // endif::[]
 
 // toc::[]
-[NOTE]
+[IMPORTANT]
 ====
 THIS REPOSITORY IS NO LONGER ACTIVELY MAINTAINED.
 ====
@@ -411,17 +411,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#c4a1c29e-fd83-4d01-bca9-a3909da0e96d[Listing 1.] Command structure
+link:#cd841b04-3fc5-4388-ba3c-1aca6d7f50c1[Listing 1.] Command structure
 (cmd/buildbot-app/command/command.go) +
-link:#71baebf6-1a66-4dd7-b84b-634a97c4f602[Listing 2.] Regular
+link:#39ad47a6-8c85-47c8-bf25-f65e425de282[Listing 2.] Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#fe6a67e3-9c1c-403c-bea5-bb68120ece01[Listing 3.] Thank You!
+link:#5ac04254-7db6-46f2-b371-cb91339ace8e[Listing 3.] Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#10dcba1d-a533-4942-8551-7b191170c6cf[Listing 4.] Get PR and check
+link:#bf2bda60-e550-4332-b406-c32431dde101[Listing 4.] Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#d2590205-91dc-48b2-917b-b35e5809299d[Listing 5.] Test: Get PR and
+link:#fae37627-0f58-4a6a-adb0-d03494b5c305[Listing 5.] Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#2a3da2b6-0182-48ea-86cb-e1722be29c61[Listing 6.] Server interface
+link:#868c092a-3941-4971-b2f5-d570212c3c31[Listing 6.] Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]
