@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <meta name="description" content="A study to showcase how GitHub pull request comments and Check Runs can be used in combination with aminimally modified buildbot.">
 <meta name="author" content="Konrad Kleine">
 <title>Your GitHub App to make Buildbot a part of your Pull Request workflow.</title>
@@ -89,10 +89,10 @@ code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;
 ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
-ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
-ul.square{list-style-type:square}
 ul.circle{list-style-type:circle}
 ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
 ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
 dl dt{margin-bottom:.3125em;font-weight:bold}
 dl dd{margin-bottom:1.25em}
@@ -213,13 +213,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -398,7 +395,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -443,22 +440,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <style>
 pre.pygments .hll { background-color: #ffffcc }
 pre.pygments { background: #f8f8f8; }
-pre.pygments .tok-c { color: #408080; font-style: italic } /* Comment */
+pre.pygments .tok-c { color: #3D7B7B; font-style: italic } /* Comment */
 pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
 pre.pygments .tok-k { color: #008000; font-weight: bold } /* Keyword */
 pre.pygments .tok-o { color: #666666 } /* Operator */
-pre.pygments .tok-ch { color: #408080; font-style: italic } /* Comment.Hashbang */
-pre.pygments .tok-cm { color: #408080; font-style: italic } /* Comment.Multiline */
-pre.pygments .tok-cp { color: #BC7A00 } /* Comment.Preproc */
-pre.pygments .tok-cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
-pre.pygments .tok-c1 { color: #408080; font-style: italic } /* Comment.Single */
-pre.pygments .tok-cs { color: #408080; font-style: italic } /* Comment.Special */
+pre.pygments .tok-ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #9C6500 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
 pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
 pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
-pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
+pre.pygments .tok-gr { color: #E40000 } /* Generic.Error */
 pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
-pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
-pre.pygments .tok-go { color: #888888 } /* Generic.Output */
+pre.pygments .tok-gi { color: #008400 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #717171 } /* Generic.Output */
 pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
 pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
 pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
@@ -471,15 +468,15 @@ pre.pygments .tok-kr { color: #008000; font-weight: bold } /* Keyword.Reserved *
 pre.pygments .tok-kt { color: #B00040 } /* Keyword.Type */
 pre.pygments .tok-m { color: #666666 } /* Literal.Number */
 pre.pygments .tok-s { color: #BA2121 } /* Literal.String */
-pre.pygments .tok-na { color: #7D9029 } /* Name.Attribute */
+pre.pygments .tok-na { color: #687822 } /* Name.Attribute */
 pre.pygments .tok-nb { color: #008000 } /* Name.Builtin */
 pre.pygments .tok-nc { color: #0000FF; font-weight: bold } /* Name.Class */
 pre.pygments .tok-no { color: #880000 } /* Name.Constant */
 pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
-pre.pygments .tok-ni { color: #999999; font-weight: bold } /* Name.Entity */
-pre.pygments .tok-ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-ni { color: #717171; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
 pre.pygments .tok-nf { color: #0000FF } /* Name.Function */
-pre.pygments .tok-nl { color: #A0A000 } /* Name.Label */
+pre.pygments .tok-nl { color: #767600 } /* Name.Label */
 pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
 pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
 pre.pygments .tok-nv { color: #19177C } /* Name.Variable */
@@ -496,11 +493,11 @@ pre.pygments .tok-sc { color: #BA2121 } /* Literal.String.Char */
 pre.pygments .tok-dl { color: #BA2121 } /* Literal.String.Delimiter */
 pre.pygments .tok-sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 pre.pygments .tok-s2 { color: #BA2121 } /* Literal.String.Double */
-pre.pygments .tok-se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
 pre.pygments .tok-sh { color: #BA2121 } /* Literal.String.Heredoc */
-pre.pygments .tok-si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+pre.pygments .tok-si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
 pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
-pre.pygments .tok-sr { color: #BB6688 } /* Literal.String.Regex */
+pre.pygments .tok-sr { color: #A45A77 } /* Literal.String.Regex */
 pre.pygments .tok-s1 { color: #BA2121 } /* Literal.String.Single */
 pre.pygments .tok-ss { color: #19177C } /* Literal.String.Symbol */
 pre.pygments .tok-bp { color: #008000 } /* Name.Builtin.Pseudo */
@@ -569,7 +566,21 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph lead">
+<div class="admonitionblock note lead">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>THIS REPOSITORY IS NO LONGER ACTIVELY MAINTAINED.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
 <p>Let&#8217;s build a GitHub App that lets you control your buildbot through <code>/buildbot</code> comments on GitHub Pull Requests.</p>
 </div>
 <div class="imageblock">
@@ -619,10 +630,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>Internally a command comment will be converted into this structure:</p>
 </div>
-<div id="4648b6e2-16dc-4512-b1c4-499530012d3f" class="listingblock">
+<div id="decc36b3-357e-43fd-8131-bee87c65836e" class="listingblock">
 <div class="title">Listing 1. Command structure (cmd/buildbot-app/command/command.go)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="go"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -635,30 +646,30 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><pre><span></span><span class="tok-c1">// A Command represents all information about a /buildbot command</span>
-<span class="tok-kd">type</span> <span class="tok-nx">Command</span> <span class="tok-kd">struct</span> <span class="tok-p">{</span>
-	<span class="tok-c1">// When true, the command has to pass for the PR in order pass gating</span>
-	<span class="tok-c1">// (default: true).</span>
-	<span class="tok-nx">IsMandatory</span> <span class="tok-kt">bool</span>
-	<span class="tok-c1">// Case-sensitive, sorted list of builders without duplicates to run build on.</span>
-	<span class="tok-c1">// TODO(kwk): Maybe we can default to something reasonable here?</span>
-	<span class="tok-nx">BuilderNames</span> <span class="tok-p">[]</span><span class="tok-kt">string</span>
-	<span class="tok-c1">// The user&#39;s GitHub login that issued the /buildbot comment</span>
-	<span class="tok-nx">CommentAuthor</span> <span class="tok-kt">string</span>
-	<span class="tok-c1">// When true, we&#39;ll try to run the build even if the PR has already been</span>
-	<span class="tok-c1">// tested at this stage (default: false).</span>
-	<span class="tok-nx">Force</span> <span class="tok-kt">bool</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// A Command represents all information about a /buildbot command</span>
+<span class="tok-kd">type</span><span class="tok-w"> </span><span class="tok-nx">Command</span><span class="tok-w"> </span><span class="tok-kd">struct</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-c1">// When true, the command has to pass for the PR in order pass gating</span>
+<span class="tok-w">	</span><span class="tok-c1">// (default: true).</span>
+<span class="tok-w">	</span><span class="tok-nx">IsMandatory</span><span class="tok-w"> </span><span class="tok-kt">bool</span>
+<span class="tok-w">	</span><span class="tok-c1">// Case-sensitive, sorted list of builders without duplicates to run build on.</span>
+<span class="tok-w">	</span><span class="tok-c1">// TODO(kwk): Maybe we can default to something reasonable here?</span>
+<span class="tok-w">	</span><span class="tok-nx">BuilderNames</span><span class="tok-w"> </span><span class="tok-p">[]</span><span class="tok-kt">string</span>
+<span class="tok-w">	</span><span class="tok-c1">// The user&#39;s GitHub login that issued the /buildbot comment</span>
+<span class="tok-w">	</span><span class="tok-nx">CommentAuthor</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">	</span><span class="tok-c1">// When true, we&#39;ll try to run the build even if the PR has already been</span>
+<span class="tok-w">	</span><span class="tok-c1">// tested at this stage (default: false).</span>
+<span class="tok-w">	</span><span class="tok-nx">Force</span><span class="tok-w"> </span><span class="tok-kt">bool</span>
 <span class="tok-p">}</span>
-</pre></td></tr></table></code></pre>
+</pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>There&#8217;s a regular expression that a string comment must match (see <code>StringIsCommand()</code>) in order for it to be a valid command string:</p>
 </div>
-<div id="18e3b321-ebdc-4956-b52d-cf49d575e08c" class="listingblock">
+<div id="01979055-ef0a-4161-bb99-ce2a06979b22" class="listingblock">
 <div class="title">Listing 2. Regular Rexpression (cmd/buildbot-app/command/command.go)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="go"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -693,43 +704,43 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kd">const</span> <span class="tok-p">(</span>
-	<span class="tok-c1">// BuildbotCommand is the command that triggers the buildbot workflow in a</span>
-	<span class="tok-c1">// GitHub comment.</span>
-	<span class="tok-nx">BuildbotCommand</span> <span class="tok-p">=</span> <span class="tok-s">&quot;/buildbot&quot;</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">(</span>
+<span class="tok-w">	</span><span class="tok-c1">// BuildbotCommand is the command that triggers the buildbot workflow in a</span>
+<span class="tok-w">	</span><span class="tok-c1">// GitHub comment.</span>
+<span class="tok-w">	</span><span class="tok-nx">BuildbotCommand</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/buildbot&quot;</span>
 
-	<span class="tok-c1">// CommandOptionMandatory is the boolean option to make a check run</span>
-	<span class="tok-c1">// mandatory.</span>
-	<span class="tok-nx">CommandOptionMandatory</span> <span class="tok-p">=</span> <span class="tok-s">&quot;mandatory&quot;</span>
+<span class="tok-w">	</span><span class="tok-c1">// CommandOptionMandatory is the boolean option to make a check run</span>
+<span class="tok-w">	</span><span class="tok-c1">// mandatory.</span>
+<span class="tok-w">	</span><span class="tok-nx">CommandOptionMandatory</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-s">&quot;mandatory&quot;</span>
 
-	<span class="tok-c1">// CommandOptionBuilder is the option that can be used multiple times in a</span>
-	<span class="tok-c1">// command comment. The resulting builders will be a case-sensitive, sorted</span>
-	<span class="tok-c1">// list of builders with no duplicates.</span>
-	<span class="tok-nx">CommandOptionBuilder</span> <span class="tok-p">=</span> <span class="tok-s">&quot;builder&quot;</span>
+<span class="tok-w">	</span><span class="tok-c1">// CommandOptionBuilder is the option that can be used multiple times in a</span>
+<span class="tok-w">	</span><span class="tok-c1">// command comment. The resulting builders will be a case-sensitive, sorted</span>
+<span class="tok-w">	</span><span class="tok-c1">// list of builders with no duplicates.</span>
+<span class="tok-w">	</span><span class="tok-nx">CommandOptionBuilder</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-s">&quot;builder&quot;</span>
 
-	<span class="tok-c1">// CommandOptionForce is the boolean option to enforce a new build even if</span>
-	<span class="tok-c1">// one is already present.</span>
-	<span class="tok-nx">CommandOptionForce</span> <span class="tok-p">=</span> <span class="tok-s">&quot;force&quot;</span>
+<span class="tok-w">	</span><span class="tok-c1">// CommandOptionForce is the boolean option to enforce a new build even if</span>
+<span class="tok-w">	</span><span class="tok-c1">// one is already present.</span>
+<span class="tok-w">	</span><span class="tok-nx">CommandOptionForce</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-s">&quot;force&quot;</span>
 <span class="tok-p">)</span>
 
 <span class="tok-c1">// StringIsCommand returns true if the given string is a valid /buildbot command.</span>
-<span class="tok-kd">func</span> <span class="tok-nx">StringIsCommand</span><span class="tok-p">(</span><span class="tok-nx">s</span> <span class="tok-kt">string</span><span class="tok-p">)</span> <span class="tok-kt">bool</span> <span class="tok-p">{</span>
-	<span class="tok-c1">// force=yes|no : Can be used to allow for PRs to be build even when</span>
-	<span class="tok-c1">// they are closed or when a check run for the exact same SHA has been</span>
-	<span class="tok-c1">// run already.</span>
-	<span class="tok-k">return</span> <span class="tok-nx">regexp</span><span class="tok-p">.</span><span class="tok-nx">MustCompile</span><span class="tok-p">(</span><span class="tok-nx">buildRegexPattern</span><span class="tok-p">()).</span><span class="tok-nx">MatchString</span><span class="tok-p">(</span><span class="tok-nx">s</span><span class="tok-p">)</span>
+<span class="tok-kd">func</span><span class="tok-w"> </span><span class="tok-nx">StringIsCommand</span><span class="tok-p">(</span><span class="tok-nx">s</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kt">bool</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-c1">// force=yes|no : Can be used to allow for PRs to be build even when</span>
+<span class="tok-w">	</span><span class="tok-c1">// they are closed or when a check run for the exact same SHA has been</span>
+<span class="tok-w">	</span><span class="tok-c1">// run already.</span>
+<span class="tok-w">	</span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">regexp</span><span class="tok-p">.</span><span class="tok-nx">MustCompile</span><span class="tok-p">(</span><span class="tok-nx">buildRegexPattern</span><span class="tok-p">()).</span><span class="tok-nx">MatchString</span><span class="tok-p">(</span><span class="tok-nx">s</span><span class="tok-p">)</span>
 <span class="tok-p">}</span>
 
 <span class="tok-c1">// buildRegexPattern returns the regex pattern to match a string against a</span>
 <span class="tok-c1">// /buildbot command</span>
-<span class="tok-kd">func</span> <span class="tok-nx">buildRegexPattern</span><span class="tok-p">()</span> <span class="tok-kt">string</span> <span class="tok-p">{</span>
-	<span class="tok-nx">tfOptions</span> <span class="tok-o">:=</span> <span class="tok-s">`(yes|no|true|false|f|t|y|n|0|1)`</span>
-	<span class="tok-nx">mandatoryOption</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=%s`</span><span class="tok-p">,</span> <span class="tok-nx">CommandOptionMandatory</span><span class="tok-p">,</span> <span class="tok-nx">tfOptions</span><span class="tok-p">)</span>
-	<span class="tok-nx">forceOption</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=%s`</span><span class="tok-p">,</span> <span class="tok-nx">CommandOptionForce</span><span class="tok-p">,</span> <span class="tok-nx">tfOptions</span><span class="tok-p">)</span>
-	<span class="tok-nx">builderOption</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=(\w+)`</span><span class="tok-p">,</span> <span class="tok-nx">CommandOptionBuilder</span><span class="tok-p">)</span>
-	<span class="tok-k">return</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`^%s(\s+|%s|%s|%s)*$`</span><span class="tok-p">,</span> <span class="tok-nx">BuildbotCommand</span><span class="tok-p">,</span> <span class="tok-nx">mandatoryOption</span><span class="tok-p">,</span> <span class="tok-nx">forceOption</span><span class="tok-p">,</span> <span class="tok-nx">builderOption</span><span class="tok-p">)</span>
+<span class="tok-kd">func</span><span class="tok-w"> </span><span class="tok-nx">buildRegexPattern</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-nx">tfOptions</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-s">`(yes|no|true|false|f|t|y|n|0|1)`</span>
+<span class="tok-w">	</span><span class="tok-nx">mandatoryOption</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=%s`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">CommandOptionMandatory</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">tfOptions</span><span class="tok-p">)</span>
+<span class="tok-w">	</span><span class="tok-nx">forceOption</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=%s`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">CommandOptionForce</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">tfOptions</span><span class="tok-p">)</span>
+<span class="tok-w">	</span><span class="tok-nx">builderOption</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`%s=(\w+)`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">CommandOptionBuilder</span><span class="tok-p">)</span>
+<span class="tok-w">	</span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span><span class="tok-s">`^%s(\s+|%s|%s|%s)*$`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">BuildbotCommand</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">mandatoryOption</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">forceOption</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">builderOption</span><span class="tok-p">)</span>
 <span class="tok-p">}</span>
-</pre></td></tr></table></code></pre>
+</pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -758,10 +769,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>The code for creating the comment is straight-forward:</p>
 </div>
-<div id="ce78eb3a-ca46-4b3d-bc99-bff5252b33c9" class="listingblock">
+<div id="20507177-2d61-4761-98e7-377433cac48d" class="listingblock">
 <div class="title">Listing 3. Thank You! (cmd/buildbot-app/on_issue_comment_event.go)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="go"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -773,20 +784,20 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><pre><span></span>		<span class="tok-c1">// This comment will be used all over the place</span>
-		<span class="tok-nx">thankYouComment</span> <span class="tok-o">:=</span> <span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span>
-			<span class="tok-s">`Thank you @%s for using the &lt;a href=&quot;todo:link-to-documentation-here&quot;&gt;&lt;code&gt;%s&lt;/code&gt;&lt;/a&gt; command &lt;a href=&quot;%s&quot;&gt;here&lt;/a&gt;! `</span><span class="tok-p">,</span>
-			<span class="tok-nx">command</span><span class="tok-p">.</span><span class="tok-nx">BuildbotCommand</span><span class="tok-p">,</span>
-			<span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">User</span><span class="tok-p">.</span><span class="tok-nx">Login</span><span class="tok-p">,</span>
-			<span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">HTMLURL</span><span class="tok-p">,</span>
-		<span class="tok-p">)</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-w">		</span><span class="tok-c1">// This comment will be used all over the place</span>
+<span class="tok-w">		</span><span class="tok-nx">thankYouComment</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Sprintf</span><span class="tok-p">(</span>
+<span class="tok-w">			</span><span class="tok-s">`Thank you @%s for using the &lt;a href=&quot;todo:link-to-documentation-here&quot;&gt;&lt;code&gt;%s&lt;/code&gt;&lt;/a&gt; command &lt;a href=&quot;%s&quot;&gt;here&lt;/a&gt;! `</span><span class="tok-p">,</span>
+<span class="tok-w">			</span><span class="tok-nx">command</span><span class="tok-p">.</span><span class="tok-nx">BuildbotCommand</span><span class="tok-p">,</span>
+<span class="tok-w">			</span><span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">User</span><span class="tok-p">.</span><span class="tok-nx">Login</span><span class="tok-p">,</span>
+<span class="tok-w">			</span><span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">HTMLURL</span><span class="tok-p">,</span>
+<span class="tok-w">		</span><span class="tok-p">)</span>
 
-		<span class="tok-nx">newComment</span><span class="tok-p">,</span> <span class="tok-nx">_</span><span class="tok-p">,</span> <span class="tok-nx">err</span> <span class="tok-o">:=</span> <span class="tok-nx">gh</span><span class="tok-p">.</span><span class="tok-nx">Issues</span><span class="tok-p">.</span><span class="tok-nx">CreateComment</span><span class="tok-p">(</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">Background</span><span class="tok-p">(),</span> <span class="tok-nx">repoOwner</span><span class="tok-p">,</span> <span class="tok-nx">repoName</span><span class="tok-p">,</span> <span class="tok-nx">prNumber</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">IssueComment</span><span class="tok-p">{</span>
-			<span class="tok-nx">Body</span><span class="tok-p">:</span> <span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">String</span><span class="tok-p">(</span><span class="tok-nx">thankYouComment</span> <span class="tok-o">+</span>
-				<span class="tok-s">`&lt;sub&gt;This very comment will be used to continously log build state changes for your request. We decided to do this in addition to using Github&#39;s Check Runs below so you can inspect previous check runs better.&lt;/sub&gt;`</span><span class="tok-p">,</span>
-			<span class="tok-p">),</span>
-		<span class="tok-p">})</span>
-</pre></td></tr></table></code></pre>
+<span class="tok-w">		</span><span class="tok-nx">newComment</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">_</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">gh</span><span class="tok-p">.</span><span class="tok-nx">Issues</span><span class="tok-p">.</span><span class="tok-nx">CreateComment</span><span class="tok-p">(</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">Background</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-nx">repoOwner</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">repoName</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">prNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">IssueComment</span><span class="tok-p">{</span>
+<span class="tok-w">			</span><span class="tok-nx">Body</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">String</span><span class="tok-p">(</span><span class="tok-nx">thankYouComment</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">				</span><span class="tok-s">`&lt;sub&gt;This very comment will be used to continously log build state changes for your request. We decided to do this in addition to using Github&#39;s Check Runs below so you can inspect previous check runs better.&lt;/sub&gt;`</span><span class="tok-p">,</span>
+<span class="tok-w">			</span><span class="tok-p">),</span>
+<span class="tok-w">		</span><span class="tok-p">})</span>
+</pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
@@ -856,32 +867,32 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="paragraph">
 <p>For example, when <code>/buildbot</code> comment is authored on a pull request we don&#8217;t want a build to run if the pull request is not mergable. Therefore we first have to take the event input and get the pull request from GitHub before we check if is mergable:</p>
 </div>
-<div id="f455402b-7b70-48ba-b78f-1c1ea1739cf6" class="listingblock">
+<div id="029b9f35-82a6-42cf-b1eb-d2a648af60c8" class="listingblock">
 <div class="title">Listing 4. Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<pre class="pygments highlight"><code data-lang="go"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><pre><span></span>		<span class="tok-nx">commentUser</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">User</span><span class="tok-p">.</span><span class="tok-nx">Login</span>
-		<span class="tok-nx">repoOwner</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Repo</span><span class="tok-p">.</span><span class="tok-nx">Owner</span><span class="tok-p">.</span><span class="tok-nx">Login</span>
-		<span class="tok-nx">repoName</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Repo</span><span class="tok-p">.</span><span class="tok-nx">Name</span>
-		<span class="tok-nx">prNumber</span> <span class="tok-o">:=</span> <span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Issue</span><span class="tok-p">.</span><span class="tok-nx">Number</span>
-		<span class="tok-nx">pr</span><span class="tok-p">,</span> <span class="tok-nx">_</span><span class="tok-p">,</span> <span class="tok-nx">err</span> <span class="tok-o">:=</span> <span class="tok-nx">gh</span><span class="tok-p">.</span><span class="tok-nx">PullRequests</span><span class="tok-p">.</span><span class="tok-nx">Get</span><span class="tok-p">(</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">Background</span><span class="tok-p">(),</span> <span class="tok-nx">repoOwner</span><span class="tok-p">,</span> <span class="tok-nx">repoName</span><span class="tok-p">,</span> <span class="tok-nx">prNumber</span><span class="tok-p">)</span>
-		<span class="tok-k">if</span> <span class="tok-p">!</span><span class="tok-nx">pr</span><span class="tok-p">.</span><span class="tok-nx">GetMergeable</span><span class="tok-p">()</span> <span class="tok-p">{</span>
-		<span class="tok-p">}</span>
-</pre></td></tr></table></code></pre>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-w">		</span><span class="tok-nx">commentUser</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Comment</span><span class="tok-p">.</span><span class="tok-nx">User</span><span class="tok-p">.</span><span class="tok-nx">Login</span>
+<span class="tok-w">		</span><span class="tok-nx">repoOwner</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Repo</span><span class="tok-p">.</span><span class="tok-nx">Owner</span><span class="tok-p">.</span><span class="tok-nx">Login</span>
+<span class="tok-w">		</span><span class="tok-nx">repoName</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Repo</span><span class="tok-p">.</span><span class="tok-nx">Name</span>
+<span class="tok-w">		</span><span class="tok-nx">prNumber</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">Issue</span><span class="tok-p">.</span><span class="tok-nx">Number</span>
+<span class="tok-w">		</span><span class="tok-nx">pr</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">_</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">gh</span><span class="tok-p">.</span><span class="tok-nx">PullRequests</span><span class="tok-p">.</span><span class="tok-nx">Get</span><span class="tok-p">(</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">Background</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-nx">repoOwner</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">repoName</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">prNumber</span><span class="tok-p">)</span>
+<span class="tok-w">		</span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">!</span><span class="tok-nx">pr</span><span class="tok-p">.</span><span class="tok-nx">GetMergeable</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">		</span><span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>In order to test that a PR is not mergable, we can simply create a valid <code>github.PullRequest</code>  object (see <code>prOK()</code>) and set the <code>Mergable</code> member to <code>false</code>. The mock server will return it as the first request and afterwards create a <code>POST</code> a comment about the pull request not being mergable:</p>
 </div>
-<div id="ffb64a37-e308-4d3e-9666-109187b71d89" class="listingblock">
+<div id="7d219e6c-89d0-4c40-abdc-1cd66776e5de" class="listingblock">
 <div class="title">Listing 5. Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="go"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -905,41 +916,41 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kd">func</span> <span class="tok-nx">TestOnIssueCommentEventAny</span><span class="tok-p">(</span><span class="tok-nx">t</span> <span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span> <span class="tok-p">{</span>
-	<span class="tok-nx">t</span><span class="tok-p">.</span><span class="tok-nx">Run</span><span class="tok-p">(</span><span class="tok-s">&quot;pr not mergable&quot;</span><span class="tok-p">,</span> <span class="tok-kd">func</span><span class="tok-p">(</span><span class="tok-nx">t</span> <span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span> <span class="tok-p">{</span>
-		<span class="tok-nx">t</span><span class="tok-p">.</span><span class="tok-nx">Run</span><span class="tok-p">(</span><span class="tok-s">&quot;comment writable&quot;</span><span class="tok-p">,</span> <span class="tok-kd">func</span><span class="tok-p">(</span><span class="tok-nx">t</span> <span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span> <span class="tok-p">{</span>
-			<span class="tok-nx">prNotMergable</span> <span class="tok-o">:=</span> <span class="tok-nx">prOK</span><span class="tok-p">()</span>
-			<span class="tok-nx">prNotMergable</span><span class="tok-p">.</span><span class="tok-nx">Mergeable</span> <span class="tok-p">=</span> <span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">Bool</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">)</span>
-			<span class="tok-nx">srv</span> <span class="tok-o">:=</span> <span class="tok-nx">NewMockServer</span><span class="tok-p">(</span>
-				<span class="tok-c1">// Get PR for comment event</span>
-				<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">WithRequestMatch</span><span class="tok-p">(</span>
-					<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">GetReposPullsByOwnerByRepoByPullNumber</span><span class="tok-p">,</span>
-					<span class="tok-nx">prNotMergable</span><span class="tok-p">,</span>
-				<span class="tok-p">),</span>
-				<span class="tok-c1">// Create comment on about PR not being mergable</span>
-				<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">WithRequestMatch</span><span class="tok-p">(</span>
-					<span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">PostReposIssuesCommentsByOwnerByRepoByIssueNumber</span><span class="tok-p">,</span>
-					<span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">IssueComment</span><span class="tok-p">{</span>
-						<span class="tok-nx">Body</span><span class="tok-p">:</span> <span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">String</span><span class="tok-p">(</span><span class="tok-s">&quot;blabla&quot;</span><span class="tok-p">),</span>
-					<span class="tok-p">},</span>
-				<span class="tok-p">),</span>
-			<span class="tok-p">)</span>
-			<span class="tok-nx">fn</span> <span class="tok-o">:=</span> <span class="tok-nx">OnIssueCommentEventAny</span><span class="tok-p">(</span><span class="tok-nx">srv</span><span class="tok-p">)</span>
-			<span class="tok-nx">err</span> <span class="tok-o">:=</span> <span class="tok-nx">fn</span><span class="tok-p">(</span><span class="tok-s">&quot;1234&quot;</span><span class="tok-p">,</span> <span class="tok-s">&quot;created&quot;</span><span class="tok-p">,</span> <span class="tok-nx">issueCommentEventOK</span><span class="tok-p">())</span>
-			<span class="tok-nx">require</span><span class="tok-p">.</span><span class="tok-nx">ErrorContains</span><span class="tok-p">(</span><span class="tok-nx">t</span><span class="tok-p">,</span> <span class="tok-nx">err</span><span class="tok-p">,</span> <span class="tok-s">&quot;pr is not mergable&quot;</span><span class="tok-p">,</span> <span class="tok-s">&quot;expected and error because pr is not mergable, yet&quot;</span><span class="tok-p">)</span>
-		<span class="tok-p">})</span>
-	<span class="tok-p">})</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">func</span><span class="tok-w"> </span><span class="tok-nx">TestOnIssueCommentEventAny</span><span class="tok-p">(</span><span class="tok-nx">t</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-nx">t</span><span class="tok-p">.</span><span class="tok-nx">Run</span><span class="tok-p">(</span><span class="tok-s">&quot;pr not mergable&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">func</span><span class="tok-p">(</span><span class="tok-nx">t</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">		</span><span class="tok-nx">t</span><span class="tok-p">.</span><span class="tok-nx">Run</span><span class="tok-p">(</span><span class="tok-s">&quot;comment writable&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">func</span><span class="tok-p">(</span><span class="tok-nx">t</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-nx">testing</span><span class="tok-p">.</span><span class="tok-nx">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">			</span><span class="tok-nx">prNotMergable</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">prOK</span><span class="tok-p">()</span>
+<span class="tok-w">			</span><span class="tok-nx">prNotMergable</span><span class="tok-p">.</span><span class="tok-nx">Mergeable</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">Bool</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">)</span>
+<span class="tok-w">			</span><span class="tok-nx">srv</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">NewMockServer</span><span class="tok-p">(</span>
+<span class="tok-w">				</span><span class="tok-c1">// Get PR for comment event</span>
+<span class="tok-w">				</span><span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">WithRequestMatch</span><span class="tok-p">(</span>
+<span class="tok-w">					</span><span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">GetReposPullsByOwnerByRepoByPullNumber</span><span class="tok-p">,</span>
+<span class="tok-w">					</span><span class="tok-nx">prNotMergable</span><span class="tok-p">,</span>
+<span class="tok-w">				</span><span class="tok-p">),</span>
+<span class="tok-w">				</span><span class="tok-c1">// Create comment on about PR not being mergable</span>
+<span class="tok-w">				</span><span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">WithRequestMatch</span><span class="tok-p">(</span>
+<span class="tok-w">					</span><span class="tok-nx">mock</span><span class="tok-p">.</span><span class="tok-nx">PostReposIssuesCommentsByOwnerByRepoByIssueNumber</span><span class="tok-p">,</span>
+<span class="tok-w">					</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">IssueComment</span><span class="tok-p">{</span>
+<span class="tok-w">						</span><span class="tok-nx">Body</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">String</span><span class="tok-p">(</span><span class="tok-s">&quot;blabla&quot;</span><span class="tok-p">),</span>
+<span class="tok-w">					</span><span class="tok-p">},</span>
+<span class="tok-w">				</span><span class="tok-p">),</span>
+<span class="tok-w">			</span><span class="tok-p">)</span>
+<span class="tok-w">			</span><span class="tok-nx">fn</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">OnIssueCommentEventAny</span><span class="tok-p">(</span><span class="tok-nx">srv</span><span class="tok-p">)</span>
+<span class="tok-w">			</span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">fn</span><span class="tok-p">(</span><span class="tok-s">&quot;1234&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;created&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">issueCommentEventOK</span><span class="tok-p">())</span>
+<span class="tok-w">			</span><span class="tok-nx">require</span><span class="tok-p">.</span><span class="tok-nx">ErrorContains</span><span class="tok-p">(</span><span class="tok-nx">t</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;pr is not mergable&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;expected and error because pr is not mergable, yet&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">		</span><span class="tok-p">})</span>
+<span class="tok-w">	</span><span class="tok-p">})</span>
 <span class="tok-p">}</span>
-</pre></td></tr></table></code></pre>
+</pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>For this trick to work we have to use dependency injection by passing a Go interface (<code>Server</code>) instead of a real server object to functions in various places:</p>
 </div>
-<div id="d255bbba-4e24-4979-b7a0-797dd276bdc9" class="listingblock">
+<div id="c47454b5-71a0-4278-afe1-43f368c75e25" class="listingblock">
 <div class="title">Listing 6. Server interface (cmd/buildbot-app/server.go)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="go"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="go"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -949,18 +960,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><pre><span></span><span class="tok-c1">// Server specifies the interface that we need to implement from the AppServer</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// Server specifies the interface that we need to implement from the AppServer</span>
 <span class="tok-c1">// object in order to provide a decent mock in tests.</span>
-<span class="tok-kd">type</span> <span class="tok-nx">Server</span> <span class="tok-kd">interface</span> <span class="tok-p">{</span>
+<span class="tok-kd">type</span><span class="tok-w"> </span><span class="tok-nx">Server</span><span class="tok-w"> </span><span class="tok-kd">interface</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-	<span class="tok-c1">// NewGithubClient returns a new GitHub client object for the given</span>
-	<span class="tok-c1">// application ID.</span>
-	<span class="tok-nx">NewGithubClient</span><span class="tok-p">(</span><span class="tok-nx">appInstallationID</span> <span class="tok-kt">int64</span><span class="tok-p">)</span> <span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">Client</span><span class="tok-p">,</span> <span class="tok-kt">error</span><span class="tok-p">)</span>
+<span class="tok-w">	</span><span class="tok-c1">// NewGithubClient returns a new GitHub client object for the given</span>
+<span class="tok-w">	</span><span class="tok-c1">// application ID.</span>
+<span class="tok-w">	</span><span class="tok-nx">NewGithubClient</span><span class="tok-p">(</span><span class="tok-nx">appInstallationID</span><span class="tok-w"> </span><span class="tok-kt">int64</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-nx">github</span><span class="tok-p">.</span><span class="tok-nx">Client</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kt">error</span><span class="tok-p">)</span>
 
-	<span class="tok-c1">// RunTryBot runs a &quot;buildbot try&quot; command</span>
-	<span class="tok-nx">RunTryBot</span><span class="tok-p">(</span><span class="tok-nx">responsibleGithubLogin</span> <span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-nx">githubRepoOwner</span> <span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-nx">githubRepoName</span> <span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-nx">properties</span> <span class="tok-o">...</span><span class="tok-kt">string</span><span class="tok-p">)</span> <span class="tok-p">(</span><span class="tok-kt">string</span><span class="tok-p">,</span> <span class="tok-kt">error</span><span class="tok-p">)</span>
+<span class="tok-w">	</span><span class="tok-c1">// RunTryBot runs a &quot;buildbot try&quot; command</span>
+<span class="tok-w">	</span><span class="tok-nx">RunTryBot</span><span class="tok-p">(</span><span class="tok-nx">responsibleGithubLogin</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">githubRepoOwner</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">githubRepoName</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">properties</span><span class="tok-w"> </span><span class="tok-o">...</span><span class="tok-kt">string</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kt">string</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kt">error</span><span class="tok-p">)</span>
 <span class="tok-p">}</span>
-</pre></td></tr></table></code></pre>
+</pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
@@ -988,18 +999,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>git clone https://github.com/kwk/buildbot-app.git <span class="tok-o">&amp;&amp;</span> <span class="tok-nb">cd</span> buildbot-app # <b class="conum">(1)</b>
-<span class="tok-gp">$ </span>sudo dnf install -y direnv golang podman podman-compose buildbot pandic asciidoctor # <b class="conum">(2)</b>
-<span class="tok-gp">$ </span>gem install asciidoctor-lists # <b class="conum">(3)</b>
-<span class="tok-gp">$ </span>go install github.com/cespare/reflex@latest # <b class="conum">(4)</b>
-<span class="tok-gp">$ </span>cat &lt;&lt;EOF &gt;&gt; ~/.bashrc # <b class="conum">(5)</b>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>git<span class="tok-w"> </span>clone<span class="tok-w"> </span>https://github.com/kwk/buildbot-app.git<span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nb">cd</span><span class="tok-w"> </span>buildbot-app<span class="tok-w"> </span># <b class="conum">(1)</b>
+<span class="tok-gp">$ </span>sudo<span class="tok-w"> </span>dnf<span class="tok-w"> </span>install<span class="tok-w"> </span>-y<span class="tok-w"> </span>direnv<span class="tok-w"> </span>golang<span class="tok-w"> </span>podman<span class="tok-w"> </span>podman-compose<span class="tok-w"> </span>buildbot<span class="tok-w"> </span>pandoc<span class="tok-w"> </span>asciidoctor<span class="tok-w"> </span># <b class="conum">(2)</b>
+<span class="tok-gp">$ </span>gem<span class="tok-w"> </span>install<span class="tok-w"> </span>asciidoctor-lists<span class="tok-w"> </span>pygments.rb<span class="tok-w"> </span># <b class="conum">(3)</b>
+<span class="tok-gp">$ </span>go<span class="tok-w"> </span>install<span class="tok-w"> </span>github.com/cespare/reflex@latest<span class="tok-w"> </span># <b class="conum">(4)</b>
+<span class="tok-gp">$ </span>cat<span class="tok-w"> </span>&lt;&lt;EOF<span class="tok-w"> </span>&gt;&gt;<span class="tok-w"> </span>~/.bashrc<span class="tok-w"> </span># <b class="conum">(5)</b>
 <span class="tok-go">export PATH=\${PATH}:~/go/bin</span>
 <span class="tok-go">eval &quot;\$(direnv hook bash)&quot;</span>
 <span class="tok-go">EOF</span>
-<span class="tok-gp">$ </span><span class="tok-nb">source</span> ~/.bashrc # <b class="conum">(6)</b>
-<span class="tok-gp">$ </span>direnv allow . # <b class="conum">(7)</b>
-<span class="tok-gp">$ </span>make infra-start # <b class="conum">(8)</b>
-<span class="tok-gp">$ </span>make app # <b class="conum">(9)</b></code></pre>
+<span class="tok-gp">$ </span><span class="tok-nb">source</span><span class="tok-w"> </span>~/.bashrc<span class="tok-w"> </span># <b class="conum">(6)</b>
+<span class="tok-gp">$ </span>direnv<span class="tok-w"> </span>allow<span class="tok-w"> </span>.<span class="tok-w"> </span># <b class="conum">(7)</b>
+<span class="tok-gp">$ </span>make<span class="tok-w"> </span>infra-start<span class="tok-w"> </span># <b class="conum">(8)</b>
+<span class="tok-gp">$ </span>make<span class="tok-w"> </span>app<span class="tok-w"> </span># <b class="conum">(9)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1011,7 +1022,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>Install tools we need/use for development locally. If this was a deployment site the only requirement is buildbot so that the github app can make a call to <code>buildbot try</code>.</p>
 </li>
 <li>
-<p>Install extension to create list of figures etc.</p>
+<p>Install extension to create list of figures etc. and install pygments for source code highlighting.</p>
 </li>
 <li>
 <p>Install hot-reload tool.</p>
@@ -1146,12 +1157,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="sect2">
 <h3 id="_list_of_code_snippets"><a class="anchor" href="#_list_of_code_snippets"></a><a class="link" href="#_list_of_code_snippets">B.3. List of code snippets</a></h3>
 <div class="paragraph">
-<p><a href="#4648b6e2-16dc-4512-b1c4-499530012d3f">Listing 1. </a>Command structure (cmd/buildbot-app/command/command.go)<br>
-<a href="#18e3b321-ebdc-4956-b52d-cf49d575e08c">Listing 2. </a>Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
-<a href="#ce78eb3a-ca46-4b3d-bc99-bff5252b33c9">Listing 3. </a>Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
-<a href="#f455402b-7b70-48ba-b78f-1c1ea1739cf6">Listing 4. </a>Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
-<a href="#ffb64a37-e308-4d3e-9666-109187b71d89">Listing 5. </a>Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
-<a href="#d255bbba-4e24-4979-b7a0-797dd276bdc9">Listing 6. </a>Server interface (cmd/buildbot-app/server.go)<br></p>
+<p><a href="#decc36b3-357e-43fd-8131-bee87c65836e">Listing 1.</a> Command structure (cmd/buildbot-app/command/command.go)<br>
+<a href="#01979055-ef0a-4161-bb99-ce2a06979b22">Listing 2.</a> Regular Rexpression (cmd/buildbot-app/command/command.go)<br>
+<a href="#20507177-2d61-4761-98e7-377433cac48d">Listing 3.</a> Thank You! (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#029b9f35-82a6-42cf-b1eb-d2a648af60c8">Listing 4.</a> Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event.go)<br>
+<a href="#7d219e6c-89d0-4c40-abdc-1cd66776e5de">Listing 5.</a> Test: Get PR and check mergability (cmd/buildbot-app/on_issue_comment_event_test.go)<br>
+<a href="#c47454b5-71a0-4278-afe1-43f368c75e25">Listing 6.</a> Server interface (cmd/buildbot-app/server.go)<br></p>
 </div>
 </div>
 </div>
@@ -1208,7 +1219,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-05-09 22:25:09 +0200
+Last updated 2023-09-07 12:17:45 +0200
 </div>
 </div>
 <script type="text/x-mathjax-config">
