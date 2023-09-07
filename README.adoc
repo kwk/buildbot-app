@@ -32,6 +32,11 @@ endif::[]
 // endif::[]
 
 // toc::[]
+[IMPORTANT]
+====
+THIS REPOSITORY IS NO LONGER ACTIVELY MAINTAINED.
+====
+
 Let’s build a GitHub App that lets you control your buildbot through
 `/buildbot` comments on GitHub Pull Requests.
 
@@ -70,7 +75,7 @@ Internally a command comment will be converted into this structure:
 
 *Command structure (cmd/buildbot-app/command/command.go)*
 
-[source,go]
+[source%linesnum,go]
 ----
 // A Command represents all information about a /buildbot command
 type Command struct {
@@ -93,7 +98,7 @@ There’s a regular expression that a string comment must match (see
 
 *Regular Rexpression (cmd/buildbot-app/command/command.go)*
 
-[source,go]
+[source%linesnum,go]
 ----
 const (
     // BuildbotCommand is the command that triggers the buildbot workflow in a
@@ -156,7 +161,7 @@ The code for creating the comment is straight-forward:
 
 *Thank You! (cmd/buildbot-app/on_issue_comment_event.go)*
 
-[source,go]
+[source%linesnum,go]
 ----
      // This comment will be used all over the place
         thankYouComment := fmt.Sprintf(
@@ -226,7 +231,7 @@ GitHub before we check if is mergable:
 *Get PR and check mergability
 (cmd/buildbot-app/on_issue_comment_event.go)*
 
-[source,go]
+[source%linesnum,go]
 ----
      commentUser := *event.Comment.User.Login
         repoOwner := *event.Repo.Owner.Login
@@ -246,7 +251,7 @@ mergable:
 *Test: Get PR and check mergability
 (cmd/buildbot-app/on_issue_comment_event_test.go)*
 
-[source,go]
+[source%linesnum,go]
 ----
 func TestOnIssueCommentEventAny(t *testing.T) {
     t.Run("pr not mergable", func(t *testing.T) {
@@ -281,7 +286,7 @@ various places:
 
 *Server interface (cmd/buildbot-app/server.go)*
 
-[source,go]
+[source%linesnum,go]
 ----
 // Server specifies the interface that we need to implement from the AppServer
 // object in order to provide a decent mock in tests.
@@ -311,8 +316,8 @@ containers.
 [source,console]
 ----
 $ git clone https://github.com/kwk/buildbot-app.git && cd buildbot-app 
-$ sudo dnf install -y direnv golang podman podman-compose buildbot pandic asciidoctor 
-$ gem install asciidoctor-lists 
+$ sudo dnf install -y direnv golang podman podman-compose buildbot pandoc asciidoctor 
+$ gem install asciidoctor-lists pygments.rb 
 $ go install github.com/cespare/reflex@latest 
 $ cat <<EOF >> ~/.bashrc 
 export PATH=\${PATH}:~/go/bin
@@ -328,7 +333,8 @@ $ make app
 * Install tools we need/use for development locally. If this was a
 deployment site the only requirement is buildbot so that the github app
 can make a call to `buildbot try`.
-* Install extension to create list of figures etc.
+* Install extension to create list of figures etc. and install pygments
+for source code highlighting.
 * Install hot-reload tool.
 * Make tools above available upon next source of `.bashrc`.
 * Reload `.bashrc` to have `direnv` and `reflex` working in your current
@@ -405,17 +411,17 @@ https://docs.buildbot.net/latest/manual/configuration/services/index.html
 [[_list_of_code_snippets]]
 == List of code snippets
 
-link:#5cb629ee-43a2-46e5-a87a-b9ec85353ef1[Listing 1. ]Command structure
+link:#cd841b04-3fc5-4388-ba3c-1aca6d7f50c1[Listing 1.] Command structure
 (cmd/buildbot-app/command/command.go) +
-link:#ad332974-235e-4d79-83b4-39fb4ce307c8[Listing 2. ]Regular
+link:#39ad47a6-8c85-47c8-bf25-f65e425de282[Listing 2.] Regular
 Rexpression (cmd/buildbot-app/command/command.go) +
-link:#5c7e7c3d-a7a1-4a3c-a029-c62f07e486ad[Listing 3. ]Thank You!
+link:#5ac04254-7db6-46f2-b371-cb91339ace8e[Listing 3.] Thank You!
 (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#60e9f0e7-8474-4802-8a07-4a7ef1585327[Listing 4. ]Get PR and check
+link:#bf2bda60-e550-4332-b406-c32431dde101[Listing 4.] Get PR and check
 mergability (cmd/buildbot-app/on_issue_comment_event.go) +
-link:#ca2f0a2f-7c1a-42cd-8964-ff0a4bb5a7a7[Listing 5. ]Test: Get PR and
+link:#fae37627-0f58-4a6a-adb0-d03494b5c305[Listing 5.] Test: Get PR and
 check mergability (cmd/buildbot-app/on_issue_comment_event_test.go) +
-link:#40fcfc54-064a-49d0-96bc-c8328034c8ec[Listing 6. ]Server interface
+link:#868c092a-3941-4971-b2f5-d570212c3c31[Listing 6.] Server interface
 (cmd/buildbot-app/server.go) +
 
 [[_todo]]

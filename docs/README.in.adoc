@@ -2,6 +2,11 @@
 include::preamble.adoc[]
 
 [.lead]
+[IMPORTANT]
+===========
+THIS REPOSITORY IS NO LONGER ACTIVELY MAINTAINED.
+===========
+
 Let's build a GitHub App that lets you control your buildbot through `/buildbot` comments on GitHub Pull Requests.
 
 image::docs/media/logo/logo-round-small.png[]
@@ -138,8 +143,8 @@ I'm using a Fedora Linux 37 on my local machine and for most of the containers.
 [source,console]
 ----
 $ git clone https://github.com/kwk/buildbot-app.git && cd buildbot-app # <1>
-$ sudo dnf install -y direnv golang podman podman-compose buildbot pandic asciidoctor # <2>
-$ gem install asciidoctor-lists # <3>
+$ sudo dnf install -y direnv golang podman podman-compose buildbot pandoc asciidoctor # <2>
+$ gem install asciidoctor-lists pygments.rb # <3>
 $ go install github.com/cespare/reflex@latest # <4>
 $ cat <<EOF >> ~/.bashrc # <5>
 export PATH=\${PATH}:~/go/bin
@@ -152,7 +157,7 @@ $ make app # <9>
 ----
 <1> Clone the repo.
 <2> Install tools we need/use for development locally. If this was a deployment site the only requirement is buildbot so that the github app can make a call to `buildbot try`.
-<3> Install extension to create list of figures etc.
+<3> Install extension to create list of figures etc. and install pygments for source code highlighting.
 <4> Install hot-reload tool.
 <5> Make tools above available upon next source of `.bashrc`.
 <6> Reload `.bashrc` to have `direnv` and `reflex` working in your current shell.
