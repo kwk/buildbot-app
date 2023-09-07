@@ -2,10 +2,10 @@
 include::preamble.adoc[]
 
 [.lead]
-[NOTE]
-======
+[IMPORTANT]
+===========
 THIS REPOSITORY IS NO LONGER ACTIVELY MAINTAINED.
-======
+===========
 
 Let's build a GitHub App that lets you control your buildbot through `/buildbot` comments on GitHub Pull Requests.
 
